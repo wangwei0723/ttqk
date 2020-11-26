@@ -1,0 +1,28 @@
+spring:
+  profiles: test
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://8.129.214.95:3306/tiktok?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    username: root
+    password: maimob#A20171031
+    initialSize: 10
+    minIdle: 10
+    maxActive: 100
+    maxWait: 6000
+    timeBetweenEvictionRunsMillis: 6000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 1 FROM DUAL
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    poolPreparedStatements: false
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filter: stat,wall,log4j
+mybatis:
+  base-packages: com.haozi.ttqk.model
+  config-location: classpath:mybatis.xml
+---
+spring:
+  profiles:
+    active: test
