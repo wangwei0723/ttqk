@@ -78,7 +78,11 @@ public class UserController {
         }
         return ResponseUtil.success(id);
     }
-
+    @ApiOperation(value = "保存用户权限", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "authorityList", value = "权限列表(权限ID列表字符串)", required = true, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/saveAuthority")
     public ResultVo<Boolean> saveAuthority(Integer userId,String authorityList){
         try {
@@ -109,7 +113,7 @@ public class UserController {
         }
         return ResponseUtil.success(true);
     }
-
+    @ApiOperation(value = "获取所有菜单", httpMethod = "POST")
     @PostMapping("/getAllMenuList")
     public ResultVo<UserMenuVo> getAllMenuList(){
         List<UserMenuVo> menuVos=new ArrayList<>();
@@ -145,7 +149,10 @@ public class UserController {
         return ResponseUtil.success(menuVos);
     }
 
-
+    @ApiOperation(value = "获取用户菜单", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/getUserMenuList")
     public ResultVo<UserMenuVo> getUserMenuList(Integer userId){
         List<UserMenuVo> menuVos=new ArrayList<>();
