@@ -9,6 +9,9 @@ import com.haozi.ttqk.service.MenuService;
 import com.haozi.ttqk.service.UserService;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.*;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +34,8 @@ public class UserController {
     @Resource
     private MenuService menuService;
 
+
+    @ApiOperation(value = "获取所有用户", httpMethod = "POST")
     @PostMapping("/getAllUser")
     public ResultVo<UserVo> getAllUser(){
         List<UserVo> userVos=new ArrayList<>();
@@ -49,6 +54,8 @@ public class UserController {
         }
         return ResponseUtil.success(userVos);
     }
+
+    @ApiOperation(value = "添加用户", httpMethod = "POST")
     @PostMapping("/addUser")
     public ResultVo<Integer> addUser(@RequestBody AddUserVo addUserVo){
         Integer id=null;
