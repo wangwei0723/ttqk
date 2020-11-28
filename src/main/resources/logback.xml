@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!-- 输出到文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/data/rizhi_log/yewu_ttqk.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/data/rizhi_log/yewu_ttqk.log.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <!-- 设置非立即刷新，内部使用BufferedOutputStream实现，默认缓冲区：8192bytes -->
+            <immediateFlush>false</immediateFlush>
+            <providers>
+                <timestamp>
+                    <fieldName>timestamp</fieldName>
+                    <pattern>yyyy-MM-dd HH:mm:ss.sss</pattern>
+                </timestamp>
+                <mdc />
+                <stackTrace>
+                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <maxDepthPerThrowable>30</maxDepthPerThrowable>
+                        <maxLength>2048</maxLength>
+                        <shortenedClassNameLength>20</shortenedClassNameLength>
+                        <exclude>sun\.reflect\..*\.invoke.*</exclude>
+                        <exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                        <rootCauseFirst>true</rootCauseFirst>
+                    </throwableConverter>
+                </stackTrace>
+                <pattern>
+                    <pattern>
+                        {
+                        "project": "ttqk",
+                        "thread": "%thread",
+                        "logger": "%logger",
+                        "level": "%level",
+                        "message": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- 输出到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>[ttqk] [%level] %d{yyyy-MM-dd HH:mm:ss.sss} %thread %logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 默认输出到控制台 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <logger name="dubbo.provider" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+    </logger>
+    <logger name="dubbo.consumer" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <!-- 部分日志需要关闭 -->
+    <logger name="com.alibaba.dubbo" level="ERROR" />
+    <logger name="org.apache.dubbo.common" level="ERROR" />
+    <logger name="org.apache.zookeeper.ClientCnxn" level="ERROR" />
+    <logger name="org.apache.commons" level="ERROR" />
+    <logger name="springfox.documentation.spring.web.readers.operation" level="ERROR" />
+    <logger name="org.jasig.cas" level="ERROR" />
+    <logger name="org.apache.dubbo.config.spring.context.annotation" level="ERROR" />
+    <!--<logger name="com.zhihuishu.virtualcourse.mapper.virtualcourse.ClassMapper" level="debug" />-->
+    <logger name="com.haozi.ttqk.mapper" level="debug" />
+
+    <!-- 业务日志输出到文件 -->
+    <logger name="com.haozi.ttqk" level="INFO" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="VirtualCourseApplication" level="info">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+
+</configuration>

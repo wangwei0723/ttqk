@@ -91,7 +91,7 @@ public class UserController {
             }
 
             List<OperationUserFeatures> userFeatures=new ArrayList<>();
-            if(StringUtils.isEmpty(authorityList)){
+            if(!StringUtils.isEmpty(authorityList)){
                 List<Integer> featureIds= JSONObject.parseObject(authorityList,new TypeReference<List<Integer>>(){});
                 if(!CollectionUtils.isEmpty(featureIds)){
                     for (Integer featureId:featureIds) {
@@ -128,7 +128,7 @@ public class UserController {
                     for (TtDic ttDic:parentMenu) {
                         UserMenuVo userMenuVo=new UserMenuVo();
                         BeanUtils.copyProperties(ttDic,userMenuVo);
-                        List<TtDic> childrenMenu=ttDicList.stream().filter(x->x.getParentId().equals(ttDic.getId())).collect(Collectors.toList());
+                        List<TtDic> childrenMenu=ttDicList.stream().filter(x->(x.getParentId()!=null && x.getParentId().equals(ttDic.getId()))).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(childrenMenu)){
                             List<ChildMenuVo> childMenuVos=new ArrayList<>();
                             for (TtDic ttDic1:childrenMenu) {
@@ -170,7 +170,7 @@ public class UserController {
                         for (TtDic ttDic:parentMenu) {
                             UserMenuVo userMenuVo=new UserMenuVo();
                             BeanUtils.copyProperties(ttDic,userMenuVo);
-                            List<TtDic> childrenMenu=ttDicList.stream().filter(x->x.getParentId().equals(ttDic.getId())).collect(Collectors.toList());
+                            List<TtDic> childrenMenu=ttDicList.stream().filter(x->(x.getParentId()!=null && x.getParentId().equals(ttDic.getId()))).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(childrenMenu)){
                                 List<ChildMenuVo> childMenuVos=new ArrayList<>();
                                 for (TtDic ttDic1:childrenMenu) {

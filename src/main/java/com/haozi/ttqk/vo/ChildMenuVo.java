@@ -1,5 +1,8 @@
 package com.haozi.ttqk.vo;
 
+import lombok.Data;
+
+@Data
 public class ChildMenuVo {
     private Integer id;
     private Integer typeId;
