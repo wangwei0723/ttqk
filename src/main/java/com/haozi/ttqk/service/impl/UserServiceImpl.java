@@ -21,4 +21,10 @@ public class UserServiceImpl implements UserService {
         Integer id=operationUserMapper.insertSelective(user);
         return id;
     }
+
+    @Override
+    public Integer checkToken(Integer userId, String token) {
+        return 1;
+    }
+
 }

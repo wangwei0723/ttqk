@@ -22,8 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/user")
@@ -34,6 +33,29 @@ public class UserController {
     @Resource
     private MenuService menuService;
 
+    @ApiOperation(value = "登录", httpMethod = "POST")
+    @PostMapping("/login")
+    public ResultVo<Map<String,String>> login(AddUserVo addUserVo){
+        Map<String,String> map=new HashMap<>();
+        String token=null;
+        try {
+            if(addUserVo==null){
+                return ResponseUtil.fail("参数不能为空");
+            }
+            if(StringUtils.isEmpty(addUserVo.getName())){
+                return ResponseUtil.fail("用户名不能为空");
+            }
+            if(StringUtils.isEmpty(addUserVo.getPwd())){
+                return ResponseUtil.fail("密码不能为空");
+            }
+            token= UUID.randomUUID().toString();
+            map.put("token",token);
+        } catch (Exception e) {
+            log.info("添加用户出现异常",e);
+            ResponseUtil.fail("失败");
+        }
+        return ResponseUtil.success(map);
+    }
 
     @ApiOperation(value = "获取所有用户", httpMethod = "POST")
     @PostMapping("/getAllUser")
@@ -57,7 +79,7 @@ public class UserController {
 
     @ApiOperation(value = "添加用户", httpMethod = "POST")
     @PostMapping("/addUser")
-    public ResultVo<Integer> addUser(@RequestBody AddUserVo addUserVo){
+    public ResultVo<Integer> addUser(AddUserVo addUserVo){
         Integer id=null;
         try {
             if(addUserVo==null){
