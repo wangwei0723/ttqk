@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface UserService {
     List<OperationUser> getAllUser();
+    Integer addUser(OperationUser user);
 }

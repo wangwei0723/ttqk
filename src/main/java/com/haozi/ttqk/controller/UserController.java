@@ -1,20 +1,20 @@
 package com.haozi.ttqk.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.haozi.ttqk.model.OperationUser;
 import com.haozi.ttqk.model.OperationUserFeatures;
 import com.haozi.ttqk.model.TtDic;
 import com.haozi.ttqk.service.MenuService;
 import com.haozi.ttqk.service.UserService;
 import com.haozi.ttqk.util.ResponseUtil;
-import com.haozi.ttqk.vo.ChildMenuVo;
-import com.haozi.ttqk.vo.ResultVo;
-import com.haozi.ttqk.vo.UserMenuVo;
-import com.haozi.ttqk.vo.UserVo;
+import com.haozi.ttqk.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,6 +48,59 @@ public class UserController {
             ResponseUtil.fail("失败");
         }
         return ResponseUtil.success(userVos);
+    }
+    @PostMapping("/addUser")
+    public ResultVo<Integer> addUser(@RequestBody AddUserVo addUserVo){
+        Integer id=null;
+        try {
+            if(addUserVo==null){
+                return ResponseUtil.fail("参数不能为空");
+            }
+            if(StringUtils.isEmpty(addUserVo.getName())){
+                return ResponseUtil.fail("用户名不能为空");
+            }
+            if(StringUtils.isEmpty(addUserVo.getPwd())){
+                return ResponseUtil.fail("密码不能为空");
+            }
+            OperationUser operationUser=new OperationUser();
+            BeanUtils.copyProperties(addUserVo,operationUser);
+            id=userService.addUser(operationUser);
+        } catch (Exception e) {
+            log.info("添加用户出现异常",e);
+            ResponseUtil.fail("失败");
+        }
+        return ResponseUtil.success(id);
+    }
+
+    @PostMapping("/saveAuthority")
+    public ResultVo<Boolean> saveAuthority(Integer userId,String authorityList){
+        try {
+            if(userId==null){
+                ResponseUtil.fail("用户ID能为空");
+            }
+
+            List<OperationUserFeatures> userFeatures=new ArrayList<>();
+            if(StringUtils.isEmpty(authorityList)){
+                List<Integer> featureIds= JSONObject.parseObject(authorityList,new TypeReference<List<Integer>>(){});
+                if(!CollectionUtils.isEmpty(featureIds)){
+                    for (Integer featureId:featureIds) {
+                        OperationUserFeatures operationUserFeatures=new OperationUserFeatures();
+                        operationUserFeatures.setUserId(userId);
+                        operationUserFeatures.setFeaturesId(featureId);
+                        operationUserFeatures.setIsDelete(0);
+                        userFeatures.add(operationUserFeatures);
+                    }
+                }
+            }
+            Boolean flag=menuService.saveUserFeature(userFeatures,userId);
+            if(!flag){
+                ResponseUtil.fail("保存权限失败");
+            }
+        } catch (Exception e) {
+            log.info("保存用户权限出现异常",e);
+            ResponseUtil.fail("失败");
+        }
+        return ResponseUtil.success(true);
     }
 
     @PostMapping("/getAllMenuList")

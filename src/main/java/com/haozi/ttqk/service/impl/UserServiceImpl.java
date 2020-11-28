@@ -16,4 +16,9 @@ public class UserServiceImpl implements UserService {
     public List<OperationUser> getAllUser(){
         return operationUserMapper.selectAll();
     }
+
+    public Integer addUser(OperationUser user){
+        Integer id=operationUserMapper.insertSelective(user);
+        return id;
+    }
 }

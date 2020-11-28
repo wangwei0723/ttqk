@@ -50,29 +50,35 @@ public class MenuServiceImpl implements MenuService {
         criteria.andEqualTo("userId",userId);
          return operationUserFeaturesMapper.selectByExample(example);
     }
-    public Boolean saveUserFeature(List<OperationUserFeatures> userFeatures){
+    public Boolean saveUserFeature(List<OperationUserFeatures> userFeatures,Integer userId){
         try {
+            Example example=new Example(OperationUserFeatures.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("isDelete",0);
+            criteria.andEqualTo("userId",userId);
+            OperationUserFeatures operationUserFeatures=new OperationUserFeatures();
+            operationUserFeatures.setIsDelete(1);
+            operationUserFeaturesMapper.updateByCondition(operationUserFeatures,example);
             if(CollectionUtils.isEmpty(userFeatures)){
-                return false;
+                return true;
             }
-            Integer userId=userFeatures.get(0).getUserId();
-            List<OperationUserFeatures> userCurrentFeatures=getUserFeaturesByUserId(userId);
-            List<Integer> userFeatureIds=null;
-            if(!CollectionUtils.isEmpty(userCurrentFeatures)){
-                userFeatureIds=userCurrentFeatures.stream().map(OperationUserFeatures::getFeaturesId).collect(Collectors.toList());
-            }
-            if(userFeatureIds==null){
-                userFeatureIds=new ArrayList<>();
-            }
-            List<OperationUserFeatures> userNewFeatures=new ArrayList<>();
-            for (OperationUserFeatures userFeatures1:userFeatures) {
-                if(!userFeatureIds.contains(userFeatures1.getFeaturesId())) {
-                    userNewFeatures.add(userFeatures1);
-                }
-            }
+//            List<OperationUserFeatures> userCurrentFeatures=getUserFeaturesByUserId(userId);
+//            List<Integer> userFeatureIds=null;
+//            if(!CollectionUtils.isEmpty(userCurrentFeatures)){
+//                userFeatureIds=userCurrentFeatures.stream().map(OperationUserFeatures::getFeaturesId).collect(Collectors.toList());
+//            }
+//            if(userFeatureIds==null){
+//                userFeatureIds=new ArrayList<>();
+//            }
+//            List<OperationUserFeatures> userNewFeatures=new ArrayList<>();
+//            for (OperationUserFeatures userFeatures1:userFeatures) {
+//                if(!userFeatureIds.contains(userFeatures1.getFeaturesId())) {
+//                    userNewFeatures.add(userFeatures1);
+//                }
+//            }
 
-            if(!CollectionUtils.isEmpty(userNewFeatures)){
-                operationUserFeaturesMapper.insertList(userNewFeatures);
+            if(!CollectionUtils.isEmpty(userFeatures)){
+                operationUserFeaturesMapper.insertList(userFeatures);
             }
         } catch (Exception e) {
             log.info("保存权限出现异常",e);
