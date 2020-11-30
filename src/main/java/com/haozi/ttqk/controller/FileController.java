@@ -3,6 +3,7 @@ package com.haozi.ttqk.controller;
 import com.haozi.ttqk.util.FileUploadTool;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.ResultVo;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RequestMapping("/file")
 @RestController
+@Api(value = "文件管理", description = "文件管理", protocols = "http")
 public class FileController {
     @PostMapping("/upload")
     public ResultVo<String> upload(@RequestParam(value = "file", required = false) MultipartFile multipartFile,

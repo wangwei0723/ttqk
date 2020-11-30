@@ -9,6 +9,7 @@ import com.haozi.ttqk.service.MenuService;
 import com.haozi.ttqk.service.UserService;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.*;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/user")
 @RestController
+@Api(value = "账号管理", description = "账号管理", protocols = "http")
 public class UserController {
     @Resource
     private UserService userService;
