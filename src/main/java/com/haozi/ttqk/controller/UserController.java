@@ -37,8 +37,8 @@ public class UserController {
 
     @ApiOperation(value = "登录", httpMethod = "POST")
     @PostMapping("/login")
-    public ResultVo<Map<String,String>> login(AddUserVo addUserVo){
-        Map<String,String> map=new HashMap<>();
+    public ResultVo<Map<String,Object>> login(AddUserVo addUserVo){
+        Map<String,Object> map=new HashMap<>();
         String token=null;
         try {
             if(addUserVo==null){
@@ -52,6 +52,7 @@ public class UserController {
             }
             token= UUID.randomUUID().toString();
             map.put("token",token);
+            map.put("userId",1);
         } catch (Exception e) {
             log.info("添加用户出现异常",e);
             ResponseUtil.fail("失败");

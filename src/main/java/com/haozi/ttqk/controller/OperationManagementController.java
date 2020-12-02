@@ -161,8 +161,8 @@ public class OperationManagementController {
     }
 
     @ApiOperation(value = "根据标签ID查询标签", httpMethod = "POST")
-    @PostMapping("/queryTiktokUser")
-    public ResultVo<TagVo>  queryTiktokUser(Integer tagId){
+    @PostMapping("/queryTagById")
+    public ResultVo<TagVo>  queryTagById(Integer tagId){
         TagVo tagVo=null;
         try {
             if(tagId==null){

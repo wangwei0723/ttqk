@@ -38,6 +38,9 @@ server:
 mybatis:
   base-packages: com.haozi.ttqk.model
   config-location: classpath:mybatis.xml
+system:
+  dev: test
+
 ---
 spring:
   profiles:

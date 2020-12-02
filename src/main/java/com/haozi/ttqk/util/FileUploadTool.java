@@ -7,7 +7,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 
+import com.haozi.ttqk.vo.FileEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
+@Slf4j
 public class FileUploadTool {
     // 文件最大500M
     private static long upload_maxsize = 800 * 1024 * 1024;
@@ -22,9 +25,11 @@ public class FileUploadTool {
     // 允许的视频转码格式(mencoder)
     private static String[] allowAVI = { ".wmv9", ".rm", ".rmvb" };
         
-    public static String createFile(MultipartFile multipartFile, String saveFilePath) {
+    public static FileEntity saveFile(MultipartFile multipartFile, String saveFilePath) {
         boolean bflag = false;
+        FileEntity fileEntity=new FileEntity();
         String fileName = multipartFile.getOriginalFilename();
+
         // 判断文件不为空
         if (multipartFile.getSize() != 0 && !multipartFile.isEmpty()) {
             bflag = true;
@@ -36,17 +41,21 @@ public class FileUploadTool {
                     bflag = true;
                 } else {
                     bflag = false;
+                    log.info("文件类型不允许");
                     System.out.println("文件类型不允许");
                 }
             } else {
                 bflag = false;
+                log.info("文件大小超范围");
                 System.out.println("文件大小超范围");
             }
         } else {
             bflag = false;
+            log.info("文件为空");
             System.out.println("文件为空");
         }
         if (bflag) {
+            fileEntity.setFileName(fileName);
             String realPathDir=saveFilePath+File.separator+fileName;
 //            String logoPathDir = "/video/";
 //            String logoRealPathDir = request.getSession().getServletContext().getRealPath(logoPathDir);
@@ -65,17 +74,19 @@ public class FileUploadTool {
 //            // 绝对路径
 //            String fileNamedirs = logoRealPathDir + File.separator + newFileName + fileEnd;
             System.out.println("保存的绝对路径：" + realPathDir);
+            log.info("保存的绝对路径：" + realPathDir);
             File filedirs = new File(realPathDir);
             // 转入文件
             try {
                 multipartFile.transferTo(filedirs);
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                log.info("保存文件出现异常",e);
+                return null;
             }
-            return realPathDir;
+            fileEntity.setFilePath(realPathDir);
+            return fileEntity;
         } else {
+            log.info("保存文件失败");
             return null;
         }
     }
