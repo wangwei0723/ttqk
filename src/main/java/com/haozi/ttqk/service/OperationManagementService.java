@@ -3,6 +3,7 @@ package com.haozi.ttqk.service;
 import com.haozi.ttqk.model.TiktokUser;
 import com.haozi.ttqk.model.TtPhone;
 import com.haozi.ttqk.model.TtTag;
+import com.haozi.ttqk.model.TtVideo;
 
 import java.util.List;
 
@@ -54,5 +55,12 @@ public interface OperationManagementService {
      * @return
      */
     TtTag getTagById(Integer tagId);
+
+    /**
+     * 上传视频
+     * @param ttVideo
+     * @return
+     */
+    Integer uploadVideo(TtVideo ttVideo);
 
 }

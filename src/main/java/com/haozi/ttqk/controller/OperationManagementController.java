@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.haozi.ttqk.model.TiktokUser;
 import com.haozi.ttqk.model.TtPhone;
 import com.haozi.ttqk.model.TtTag;
+import com.haozi.ttqk.model.TtVideo;
 import com.haozi.ttqk.service.OperationManagementService;
 import com.haozi.ttqk.util.ResponseUtil;
-import com.haozi.ttqk.vo.PhoneVo;
-import com.haozi.ttqk.vo.ResultVo;
-import com.haozi.ttqk.vo.TagVo;
-import com.haozi.ttqk.vo.TikTokUserVo;
+import com.haozi.ttqk.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -178,6 +176,31 @@ public class OperationManagementController {
             return ResponseUtil.fail("根据标签ID查询标签失败");
         }
         return ResponseUtil.success(tagVo);
+    }
+
+    @ApiOperation(value = "上传视频", httpMethod = "POST")
+    @PostMapping("/uploadVideo")
+    public ResultVo<String>  uploadVideo(VideoVo videoVo){
+        Integer videoId=null;
+        try {
+            if(videoVo==null || videoVo.getPath()==null||videoVo.getFaceImgPath()==null|| videoVo.getTagId()==null ||videoVo.getName()==null || videoVo.getUserId()==null ){
+                log.info("必传参数为空");
+                if(videoVo!=null){
+                    log.info("添加用户信息[{}]", JSONObject.toJSONString(videoVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtVideo ttVideo=new TtVideo();
+            BeanUtils.copyProperties(videoVo,ttVideo);
+            ttVideo.setGreat(0);
+            ttVideo.setComment(0);
+            ttVideo.setUploadState(0);
+            videoId=operationManagementService.uploadVideo(ttVideo);
+        } catch (Exception e) {
+            log.info("上传视频出现异常",e);
+            return ResponseUtil.fail("上传视频失败");
+        }
+        return ResponseUtil.success(videoId);
     }
 
 

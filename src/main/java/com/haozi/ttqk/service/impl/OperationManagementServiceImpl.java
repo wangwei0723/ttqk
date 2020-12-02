@@ -3,9 +3,11 @@ package com.haozi.ttqk.service.impl;
 import com.haozi.ttqk.mapper.TagMapper;
 import com.haozi.ttqk.mapper.TiktokUserMapper;
 import com.haozi.ttqk.mapper.TtPhoneMapper;
+import com.haozi.ttqk.mapper.VideoMapper;
 import com.haozi.ttqk.model.TiktokUser;
 import com.haozi.ttqk.model.TtPhone;
 import com.haozi.ttqk.model.TtTag;
+import com.haozi.ttqk.model.TtVideo;
 import com.haozi.ttqk.service.OperationManagementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class OperationManagementServiceImpl implements OperationManagementServic
     private TiktokUserMapper tiktokUserMapper;
     @Resource
     private TagMapper tagMapper;
+    @Resource
+    private VideoMapper videoMapper;
 
     public Boolean savePhone(TtPhone ttPhone){
         if(ttPhone==null){
@@ -120,6 +124,16 @@ public class OperationManagementServiceImpl implements OperationManagementServic
         }
 
         return ttTags.get(0);
+    }
+
+
+    public Integer uploadVideo(TtVideo ttVideo){
+        if(ttVideo==null){
+            log.info("ttVideo为空");
+            return null;
+        }
+        videoMapper.insertSelective(ttVideo);
+        return ttVideo.getId();
     }
 
 }
