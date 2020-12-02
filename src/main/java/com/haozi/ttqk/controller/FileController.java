@@ -1,5 +1,6 @@
 package com.haozi.ttqk.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.haozi.ttqk.constant.SystemConstants;
 import com.haozi.ttqk.model.TtFile;
 import com.haozi.ttqk.service.FileService;
@@ -14,15 +15,13 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.UUID;
 
 @Slf4j
@@ -47,6 +46,8 @@ public class FileController {
         FileVo fileVo=new FileVo();
         try {
             String saveFileBasePath= SystemConstants.FILE_BASE_PATH;
+//            saveFileBasePath="C:\\Users\\wangwei\\Desktop\\临时文件\\";
+
             String uuid= UUID.randomUUID().toString();
             if(tiktokId!=null){
                 saveFileBasePath=saveFileBasePath+tiktokId+ File.separator+uuid;
@@ -58,7 +59,7 @@ public class FileController {
                 log.info("文件保存失败");
                 return ResponseUtil.fail("文件上传失败");
             }
-            String fileUrl=SystemConstants.FILE_BASE_PATH+"file/upload"+uuid;
+            String fileUrl=SystemConstants.SERVICE_URL+"file/download/"+uuid;
             TtFile ttFile=new TtFile();
             ttFile.setUuid(uuid);
             ttFile.setFileDirectory(fileEntity.getFilePath());
@@ -83,5 +84,55 @@ public class FileController {
         }
         return ResponseUtil.success(fileVo);
     }
+
+    @ApiOperation(value = "下载文件接口", httpMethod = "GET")
+    @RequestMapping("/download/{uuid}")
+    public void download(@PathVariable("uuid")String uuid, HttpServletResponse response) {
+        FileVo fileVo=new FileVo();
+        try {
+            if(StringUtils.isEmpty(uuid)){
+                log.info("uuid为空");
+                response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail("uuid不能为空")));
+                return ;
+            }
+            TtFile ttFile=fileService.getFileByUuid(uuid);
+            if(ttFile==null){
+                log.info("文件不存在");
+                response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail("文件不存在")));
+                return ;
+            }
+
+            File file = new File(ttFile.getFileDirectory());
+            // 取得文件名。
+            String fileName = ttFile.getFileName();
+            // 取得文件的后缀名。
+            String ext = fileName.substring(fileName.lastIndexOf(".") + 1).toUpperCase();
+
+            // 以流的形式下载文件。
+            InputStream fis = new BufferedInputStream(new FileInputStream(ttFile.getFileDirectory()));
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            // 清空response
+            response.reset();
+            // 设置response的Header
+            response.addHeader("Content-Disposition", "attachment;fileName=\"" + new String(fileName.getBytes("GBK"), "ISO8859-1") + "\"");
+            response.addHeader("Content-Length", "" + file.length());
+            OutputStream toClient = new BufferedOutputStream(response.getOutputStream());
+            response.setContentType("application/octet-stream");
+            toClient.write(buffer);
+            toClient.flush();
+            toClient.close();
+        } catch (Exception e) {
+            log.info("上传文件出现异常",e);
+            return ;
+        }
+    }
+
+
 
 }
