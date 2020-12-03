@@ -143,6 +143,9 @@ public class FileUploadTool {
             throws Exception {
         long start = System.currentTimeMillis();
         File targetFile = new File(framefile);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
         FFmpegFrameGrabber ff = new FFmpegFrameGrabber(videofile);
         ff.start();
         int lenght = ff.getLengthInFrames();

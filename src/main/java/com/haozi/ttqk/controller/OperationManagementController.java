@@ -1,10 +1,7 @@
 package com.haozi.ttqk.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.haozi.ttqk.model.TiktokUser;
-import com.haozi.ttqk.model.TtPhone;
-import com.haozi.ttqk.model.TtTag;
-import com.haozi.ttqk.model.TtVideo;
+import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.OperationManagementService;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.*;
@@ -13,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -203,5 +201,26 @@ public class OperationManagementController {
         return ResponseUtil.success(videoId);
     }
 
+    @ApiOperation(value = "保存评论", httpMethod = "POST")
+    @PostMapping("/saveComment")
+    public ResultVo<String>  saveComment(CommentVo commentVo){
+        Integer commentId=null;
+        try {
+            if(commentVo==null || commentVo.getTagId()==null||commentVo.getType()==null|| StringUtils.isEmpty(commentVo.getComment())){
+                log.info("必传参数为空");
+                if(commentVo!=null){
+                    log.info("添加用户信息[{}]", JSONObject.toJSONString(commentVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtComment ttComment=new TtComment();
+            BeanUtils.copyProperties(commentVo,ttComment);
+            commentId=operationManagementService.saveComment(ttComment);
+        } catch (Exception e) {
+            log.info("保存评论出现异常",e);
+            return ResponseUtil.fail("保存评论失败");
+        }
+        return ResponseUtil.success(commentId);
+    }
 
 }

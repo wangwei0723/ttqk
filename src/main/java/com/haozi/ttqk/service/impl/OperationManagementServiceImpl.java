@@ -1,13 +1,7 @@
 package com.haozi.ttqk.service.impl;
 
-import com.haozi.ttqk.mapper.TagMapper;
-import com.haozi.ttqk.mapper.TiktokUserMapper;
-import com.haozi.ttqk.mapper.TtPhoneMapper;
-import com.haozi.ttqk.mapper.VideoMapper;
-import com.haozi.ttqk.model.TiktokUser;
-import com.haozi.ttqk.model.TtPhone;
-import com.haozi.ttqk.model.TtTag;
-import com.haozi.ttqk.model.TtVideo;
+import com.haozi.ttqk.mapper.*;
+import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.OperationManagementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +22,8 @@ public class OperationManagementServiceImpl implements OperationManagementServic
     private TagMapper tagMapper;
     @Resource
     private VideoMapper videoMapper;
+    @Resource
+    private CommentMapper commentMapper;
 
     public Boolean savePhone(TtPhone ttPhone){
         if(ttPhone==null){
@@ -134,6 +130,15 @@ public class OperationManagementServiceImpl implements OperationManagementServic
         }
         videoMapper.insertSelective(ttVideo);
         return ttVideo.getId();
+    }
+
+    public Integer saveComment(TtComment ttComment){
+        if(ttComment==null){
+            log.info("ttComment为空");
+            return null;
+        }
+        commentMapper.insertSelective(ttComment);
+        return ttComment.getId();
     }
 
 }

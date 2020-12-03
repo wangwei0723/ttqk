@@ -1,9 +1,6 @@
 package com.haozi.ttqk.service;
 
-import com.haozi.ttqk.model.TiktokUser;
-import com.haozi.ttqk.model.TtPhone;
-import com.haozi.ttqk.model.TtTag;
-import com.haozi.ttqk.model.TtVideo;
+import com.haozi.ttqk.model.*;
 
 import java.util.List;
 
@@ -62,5 +59,12 @@ public interface OperationManagementService {
      * @return
      */
     Integer uploadVideo(TtVideo ttVideo);
+
+    /**
+     * 保存评论
+     * @param ttComment
+     * @return
+     */
+    Integer saveComment(TtComment ttComment);
 
 }
