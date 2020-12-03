@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/manage")
 @RestController
 @Api(value = "运营管理", description = "运营管理", protocols = "http")
-public class OperationManagementController {
+public class ManagementController {
     @Resource
     private OperationManagementService operationManagementService;
 
