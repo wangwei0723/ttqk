@@ -30,7 +30,11 @@ public class OperationManagementServiceImpl implements OperationManagementServic
             log.info("ttPhone为空");
             return false;
         }
-        ttPhoneMapper.insertSelective(ttPhone);
+        if(ttPhone.getId()==null){
+            ttPhoneMapper.insertSelective(ttPhone);
+        }else {
+            ttPhoneMapper.updateByPrimaryKey(ttPhone);
+        }
         return true;
     }
 
@@ -39,10 +43,10 @@ public class OperationManagementServiceImpl implements OperationManagementServic
         Example.Criteria criteria = example.createCriteria();
         if(ttPhone!=null){
             if(ttPhone.getPhoneId()!=null){
-                criteria.andEqualTo("phoneId",ttPhone.getPhoneId());
+                criteria.andLike("phoneId","%"+ttPhone.getPhoneId()+"%");
             }
             if(ttPhone.getUuid()!=null){
-                criteria.andEqualTo("uuid",ttPhone.getUuid());
+                criteria.andLike("phoneModel","%"+ttPhone.getPhoneModel()+"%");
             }
         }
         List<TtPhone> ttPhones=ttPhoneMapper.selectByExample(example);
