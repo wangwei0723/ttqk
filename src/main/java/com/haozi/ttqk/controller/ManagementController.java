@@ -31,7 +31,7 @@ public class ManagementController {
     @PostMapping("/saveMoblie")
     public ResultVo<String>  saveMoblie(PhoneVo phoneVo){
         try {
-            if(phoneVo==null || phoneVo.getPhoneId()==null || phoneVo.getPhoneModel()==null){
+            if(phoneVo==null || phoneVo.getPhoneId()==null ){
                 log.info("必传参数为空");
                 return ResponseUtil.fail("必传参数不能为空");
             }
