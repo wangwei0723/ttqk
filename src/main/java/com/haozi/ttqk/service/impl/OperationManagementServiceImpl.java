@@ -24,6 +24,8 @@ public class OperationManagementServiceImpl implements OperationManagementServic
     private VideoMapper videoMapper;
     @Resource
     private CommentMapper commentMapper;
+    @Resource
+    private TtTaskTrainUserMapper ttTaskTrainUserMapper;
 
     public Boolean savePhone(TtPhone ttPhone){
         if(ttPhone==null){
@@ -114,7 +116,7 @@ public class OperationManagementServiceImpl implements OperationManagementServic
     }
 
     public TtTag getTagById(Integer tagId){
-        Example example=new Example(TtPhone.class);
+        Example example=new Example(TtTag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDelete",0);
         criteria.andEqualTo("id",tagId);
@@ -143,6 +145,32 @@ public class OperationManagementServiceImpl implements OperationManagementServic
         }
         commentMapper.insertSelective(ttComment);
         return ttComment.getId();
+    }
+
+
+    public Boolean saveTaskTrainUser(TtTaskTrainUser ttTaskTrainUser){
+        if(ttTaskTrainUser==null){
+            log.info("ttTaskTrainUser为空");
+            return false;
+        }
+        if(ttTaskTrainUser.getId()==null){
+            ttTaskTrainUserMapper.insertSelective(ttTaskTrainUser);
+        }else {
+            ttTaskTrainUserMapper.updateByPrimaryKey(ttTaskTrainUser);
+        }
+        return true;
+    }
+
+    public List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser){
+        Example example=new Example(TtTaskTrainUser.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(ttTaskTrainUser!=null){
+            if(ttTaskTrainUser.getTagId()!=null){
+                criteria.andEqualTo("tagId",ttTaskTrainUser.getTagId());
+            }
+        }
+        List<TtTaskTrainUser> taskTrainUsers=ttTaskTrainUserMapper.selectByExample(example);
+        return taskTrainUsers;
     }
 
 }

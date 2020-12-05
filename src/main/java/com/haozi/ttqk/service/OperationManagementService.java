@@ -67,4 +67,18 @@ public interface OperationManagementService {
      */
     Integer saveComment(TtComment ttComment);
 
+    /**
+     * 保存养号任务
+     * @param ttTaskTrainUser
+     * @return
+     */
+    Boolean saveTaskTrainUser(TtTaskTrainUser ttTaskTrainUser);
+
+    /**
+     * 查询养号任务
+     * @param ttTaskTrainUser
+     * @return
+     */
+    List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser);
+
 }

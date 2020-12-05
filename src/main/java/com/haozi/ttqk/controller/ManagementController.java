@@ -223,4 +223,46 @@ public class ManagementController {
         return ResponseUtil.success(commentId);
     }
 
+    @ApiOperation(value = "添加养号任务", httpMethod = "POST")
+    @PostMapping("/saveTaskTrainUser")
+    public ResultVo<String>  saveTaskTrainUser(TaskTrainUserVo taskTrainUserVo){
+        try {
+            if(taskTrainUserVo==null || taskTrainUserVo.getTagId()==null ){
+                log.info("必传参数为空");
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtTaskTrainUser ttTaskTrainUser=new TtTaskTrainUser();
+            BeanUtils.copyProperties(taskTrainUserVo,ttTaskTrainUser);
+            operationManagementService.saveTaskTrainUser(ttTaskTrainUser);
+        } catch (Exception e) {
+            log.info("添加养号任务出现异常",e);
+            return ResponseUtil.fail("添加养号任务失败");
+        }
+        return ResponseUtil.success("添加成功");
+    }
+
+    @ApiOperation(value = "查询养号任务", httpMethod = "POST")
+    @PostMapping("/queryTaskTrainUser")
+    public ResultVo<List<TaskTrainUserVo>>  queryTaskTrainUser(TaskTrainUserVo taskTrainUserVo){
+        List<TaskTrainUserVo> taskTrainUserVos=new ArrayList<>();
+        try {
+            TtTaskTrainUser ttTaskTrainUser=new TtTaskTrainUser();
+            if(taskTrainUserVo!=null){
+                BeanUtils.copyProperties(taskTrainUserVo,ttTaskTrainUser);
+            }
+            List<TtTaskTrainUser> taskTrainUsers= operationManagementService.queryTaskTrainUser(ttTaskTrainUser);
+            if(!CollectionUtils.isEmpty(taskTrainUsers)){
+                for (TtTaskTrainUser ttTaskTrainUser1:taskTrainUsers) {
+                    TaskTrainUserVo taskTrainUserVo1=new TaskTrainUserVo();
+                    BeanUtils.copyProperties(ttTaskTrainUser1,taskTrainUserVo1);
+                    taskTrainUserVos.add(taskTrainUserVo1);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询养号任务出现异常",e);
+            return ResponseUtil.fail("查询养号任务失败");
+        }
+        return ResponseUtil.success(taskTrainUserVos);
+    }
+
 }
