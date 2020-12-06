@@ -2,7 +2,7 @@ package com.haozi.ttqk.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.haozi.ttqk.model.*;
-import com.haozi.ttqk.service.OperationManagementService;
+import com.haozi.ttqk.service.ManagementService;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.*;
 import io.swagger.annotations.Api;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("/manage")
@@ -25,7 +26,7 @@ import java.util.List;
 @Api(value = "运营管理", description = "运营管理", protocols = "http")
 public class ManagementController {
     @Resource
-    private OperationManagementService operationManagementService;
+    private ManagementService operationManagementService;
 
     @ApiOperation(value = "添加手机", httpMethod = "POST")
     @PostMapping("/saveMoblie")
@@ -223,6 +224,26 @@ public class ManagementController {
         return ResponseUtil.success(commentId);
     }
 
+    @ApiOperation(value = "查询所有评论", httpMethod = "POST")
+    @PostMapping("/getAllComment")
+    public ResultVo<List<TagVo>>  getAllComment(){
+        List<CommentVo> commentVos=new ArrayList<>();
+        try {
+            List<TtComment> ttComments= operationManagementService.getAllComment();
+            if(!CollectionUtils.isEmpty(ttComments)){
+                for (TtComment ttComment:ttComments) {
+                    CommentVo commentVo=new CommentVo();
+                    BeanUtils.copyProperties(ttComment,commentVo);
+                    commentVos.add(commentVo);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询所有评论异常",e);
+            return ResponseUtil.fail("查询所有评论失败");
+        }
+        return ResponseUtil.success(commentVos);
+    }
+
     @ApiOperation(value = "添加养号任务", httpMethod = "POST")
     @PostMapping("/saveTaskTrainUser")
     public ResultVo<String>  saveTaskTrainUser(TaskTrainUserVo taskTrainUserVo){
@@ -252,9 +273,11 @@ public class ManagementController {
             }
             List<TtTaskTrainUser> taskTrainUsers= operationManagementService.queryTaskTrainUser(ttTaskTrainUser);
             if(!CollectionUtils.isEmpty(taskTrainUsers)){
+                Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 for (TtTaskTrainUser ttTaskTrainUser1:taskTrainUsers) {
                     TaskTrainUserVo taskTrainUserVo1=new TaskTrainUserVo();
                     BeanUtils.copyProperties(ttTaskTrainUser1,taskTrainUserVo1);
+                    taskTrainUserVo1.setTagValue(tagMap.get(taskTrainUserVo1.getTagId()));
                     taskTrainUserVos.add(taskTrainUserVo1);
                 }
             }
@@ -263,6 +286,107 @@ public class ManagementController {
             return ResponseUtil.fail("查询养号任务失败");
         }
         return ResponseUtil.success(taskTrainUserVos);
+    }
+
+    @ApiOperation(value = "添加发送任务", httpMethod = "POST")
+    @PostMapping("/saveTaskSend")
+    public ResultVo<String>  saveTaskSend(TaskSendVo taskSendVo){
+        try {
+            if(taskSendVo==null || taskSendVo.getTagId()==null|| taskSendVo.getCommentId()==null ||taskSendVo.getSendTime()==null ){
+                log.info("必传参数为空");
+                if(taskSendVo!=null){
+                    log.info("添加发送任务,[{}]",JSONObject.toJSONString(taskSendVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            if(taskSendVo.getStopTime()!=null){
+                if(taskSendVo.getStopTime().getTime()<taskSendVo.getSendTime().getTime()){
+                    return ResponseUtil.fail("发送结束时间不能早于开始时间");
+                }
+            }
+            TtTaskSend ttTaskSend=new TtTaskSend();
+            BeanUtils.copyProperties(taskSendVo,ttTaskSend);
+            operationManagementService.saveTaskSend(ttTaskSend);
+        } catch (Exception e) {
+            log.info("添加发送任务出现异常",e);
+            return ResponseUtil.fail("添加发送任务失败");
+        }
+        return ResponseUtil.success("添加成功");
+    }
+
+    @ApiOperation(value = "查询发送任务", httpMethod = "POST")
+    @PostMapping("/queryTaskSend")
+    public ResultVo<List<TaskSendVo>>  queryTaskSend(TaskSendVo taskSendVo){
+        List<TaskSendVo> taskSendVos=new ArrayList<>();
+        try {
+            TtTaskSend ttTaskSend=new TtTaskSend();
+            if(taskSendVo!=null){
+                BeanUtils.copyProperties(taskSendVo,ttTaskSend);
+            }
+            List<TtTaskSend> ttTaskSends= operationManagementService.queryTaskSend(ttTaskSend);
+            if(!CollectionUtils.isEmpty(ttTaskSends)){
+                Map<Integer,String> tagMap= operationManagementService.getTagMap();
+                Map<Integer,String> commentMap=operationManagementService.getCommentMap();
+                for (TtTaskSend ttTaskSend1:ttTaskSends) {
+                    TaskSendVo taskSendVo1=new TaskSendVo();
+                    BeanUtils.copyProperties(ttTaskSend1,taskSendVo1);
+                    taskSendVo1.setTagValue(tagMap.get(ttTaskSend1.getTagId()));
+                    taskSendVo1.setComment(commentMap.get(ttTaskSend1.getCommentId()));
+                    taskSendVos.add(taskSendVo1);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询发送任务出现异常",e);
+            return ResponseUtil.fail("查询发送任务失败");
+        }
+        return ResponseUtil.success(taskSendVos);
+    }
+
+    @ApiOperation(value = "保存添加粉丝", httpMethod = "POST")
+    @PostMapping("/saveTaskAddFans")
+    public ResultVo<String>  saveTaskAddFans(TaskAddFansVo taskAddFansVo){
+        try {
+            if(taskAddFansVo==null || taskAddFansVo.getTagId()==null|| taskAddFansVo.getAddDay()==null ||taskAddFansVo.getDelDay()==null|| taskAddFansVo.getDelDate()==null){
+                log.info("必传参数为空");
+                if(taskAddFansVo!=null){
+                    log.info("添加发送任务,[{}]",JSONObject.toJSONString(taskAddFansVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtTaskAddFans ttTaskAddFans=new TtTaskAddFans();
+            BeanUtils.copyProperties(taskAddFansVo,ttTaskAddFans);
+            operationManagementService.saveTaskAddFans(ttTaskAddFans);
+        } catch (Exception e) {
+            log.info("保存添加粉丝出现异常",e);
+            return ResponseUtil.fail("保存添加粉丝失败");
+        }
+        return ResponseUtil.success("添加成功");
+    }
+
+    @ApiOperation(value = "查询添加粉丝", httpMethod = "POST")
+    @PostMapping("/queryTaskAddFans")
+    public ResultVo<List<TaskAddFansVo>>  queryTaskAddFans(TaskAddFansVo taskAddFansVo){
+        List<TaskAddFansVo> taskAddFansVos=new ArrayList<>();
+        try {
+            TtTaskAddFans ttTaskAddFans=new TtTaskAddFans();
+            if(taskAddFansVo!=null){
+                BeanUtils.copyProperties(taskAddFansVo,ttTaskAddFans);
+            }
+            List<TtTaskAddFans> ttTaskAddFansList= operationManagementService.queryTaskAddFans(ttTaskAddFans);
+            if(!CollectionUtils.isEmpty(ttTaskAddFansList)){
+                Map<Integer,String> tagMap= operationManagementService.getTagMap();
+                for (TtTaskAddFans ttTaskAddFans1:ttTaskAddFansList) {
+                    TaskAddFansVo taskAddFansVo1=new TaskAddFansVo();
+                    BeanUtils.copyProperties(ttTaskAddFans1,taskAddFansVo1);
+                    taskAddFansVo1.setTagValue(tagMap.get(ttTaskAddFans1.getTagId()));
+                    taskAddFansVos.add(taskAddFansVo1);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询添加粉丝出现异常",e);
+            return ResponseUtil.fail("查询添加粉丝失败");
+        }
+        return ResponseUtil.success(taskAddFansVos);
     }
 
 }

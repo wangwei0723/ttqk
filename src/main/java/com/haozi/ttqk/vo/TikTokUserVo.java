@@ -23,7 +23,7 @@ public class TikTokUserVo {
     @ApiModelProperty(value = "标签ID")
     private Integer tagId;//标签ID
     @ApiModelProperty(value = "标签值")
-    private Integer tagValue;//标签值
+    private String tagValue;//标签值
     @ApiModelProperty(value = "账号状态 0 养号状态 1运营状态")
     private Integer status;//账号状态 0 养号状态 1运营状态
     @ApiModelProperty(value = "所属商户")

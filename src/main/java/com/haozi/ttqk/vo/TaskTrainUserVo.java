@@ -11,6 +11,8 @@ public class TaskTrainUserVo {
     private Integer id;
     @ApiModelProperty(value = "标签ID")
     private Integer tagId;
+    @ApiModelProperty(value = "标签值")
+    private String tagValue;//标签值
     @ApiModelProperty(value = "点赞概率 0-100")
     private Integer great;//点赞概率 0-100
     @ApiModelProperty(value = "评论概率 0-100")

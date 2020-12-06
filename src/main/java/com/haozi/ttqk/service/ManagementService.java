@@ -3,8 +3,9 @@ package com.haozi.ttqk.service;
 import com.haozi.ttqk.model.*;
 
 import java.util.List;
+import java.util.Map;
 
-public interface OperationManagementService {
+public interface ManagementService {
     /**
      * 保存手机
      * @param ttPhone
@@ -47,6 +48,12 @@ public interface OperationManagementService {
     List<TtTag> getAllTag();
 
     /**
+     * 获取所有标签map
+     * @return
+     */
+    Map<Integer,String> getTagMap();
+
+    /**
      * 根据标签ID查询标签
      * @param tagId
      * @return
@@ -68,6 +75,18 @@ public interface OperationManagementService {
     Integer saveComment(TtComment ttComment);
 
     /**
+     * 获取所有评论
+     * @return
+     */
+    List<TtComment> getAllComment();
+
+    /**
+     * 获取评论map
+     * @return
+     */
+    Map<Integer,String> getCommentMap();
+
+    /**
      * 保存养号任务
      * @param ttTaskTrainUser
      * @return
@@ -80,5 +99,33 @@ public interface OperationManagementService {
      * @return
      */
     List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser);
+
+    /**
+     * 保存发送任务
+     * @param ttTaskSend
+     * @return
+     */
+    Boolean saveTaskSend(TtTaskSend ttTaskSend);
+
+    /**
+     * 查询发送任务
+     * @param ttTaskSend
+     * @return
+     */
+    List<TtTaskSend> queryTaskSend(TtTaskSend ttTaskSend);
+
+    /**
+     * 保存添加粉丝
+     * @param ttTaskAddFans
+     * @return
+     */
+    Boolean saveTaskAddFans(TtTaskAddFans ttTaskAddFans);
+
+    /**
+     * 查询添加粉丝
+     * @param ttTaskAddFans
+     * @return
+     */
+    List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans);
 
 }
