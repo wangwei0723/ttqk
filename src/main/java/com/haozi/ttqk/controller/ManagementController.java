@@ -6,6 +6,8 @@ import com.haozi.ttqk.service.ManagementService;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.*;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -102,9 +104,11 @@ public class ManagementController {
             }
             List<TiktokUser> tiktokUsers= operationManagementService.queryTiktokUser(tiktokUser);
             if(!CollectionUtils.isEmpty(tiktokUsers)){
+                Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 for (TiktokUser tiktokUser1:tiktokUsers) {
                     TikTokUserVo tikTokUserVo1=new TikTokUserVo();
                     BeanUtils.copyProperties(tiktokUser1,tikTokUserVo1);
+                    tikTokUserVo1.setTagValue(tagMap.get(tiktokUser1.getTagId()));
                     tikTokUserVos.add(tikTokUserVo1);
                 }
             }
@@ -387,6 +391,59 @@ public class ManagementController {
             return ResponseUtil.fail("查询添加粉丝失败");
         }
         return ResponseUtil.success(taskAddFansVos);
+    }
+
+    @ApiOperation(value = "查询用户未上传视频", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "userId", required = true, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/queryUserUnUploadVideo")
+    public ResultVo<List<VideoVo>>  queryUserUnUploadVideo(Integer userId){
+        List<VideoVo> videoVos=new ArrayList<>();
+        try {
+            if(userId==null){
+                log.info("用户id不能为空");
+                return ResponseUtil.fail("userId不能为空");
+            }
+            List<TtVideo> ttVideos= operationManagementService.queryUserUnUploadVideo(userId);
+            if(!CollectionUtils.isEmpty(ttVideos)){
+                Map<Integer,String> tagMap= operationManagementService.getTagMap();
+                for (TtVideo ttVideo:ttVideos) {
+                    VideoVo videoVo=new VideoVo();
+                    BeanUtils.copyProperties(ttVideo,videoVo);
+                    videoVo.setTagValue(tagMap.get(ttVideo.getTagId()));
+                    videoVos.add(videoVo);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询用户未上传视频出现异常",e);
+            return ResponseUtil.fail("查询用户未上传视频失败");
+        }
+        return ResponseUtil.success(videoVos);
+    }
+
+
+    @ApiOperation(value = "更新视频上传状态", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "视频ID", required = true, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/updateVideoUploadState")
+    public ResultVo<Boolean>  updateVideoUploadState(Integer id){
+        List<TaskAddFansVo> taskAddFansVos=new ArrayList<>();
+        try {
+            if(id==null){
+                log.info("视频id不能为空");
+                return ResponseUtil.fail("ID不能为空");
+            }
+            Boolean flag= operationManagementService.updateVideoUploadState(id);
+            if(!flag){
+                return ResponseUtil.fail("更新视频上传状态失败");
+            }
+        } catch (Exception e) {
+            log.info("更新视频上传状态出现异常",e);
+            return ResponseUtil.fail("更新视频上传状态失败");
+        }
+        return ResponseUtil.success(true);
     }
 
 }

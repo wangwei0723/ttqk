@@ -128,4 +128,18 @@ public interface ManagementService {
      */
     List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans);
 
+    /**
+     * 获取用户所有未上传的视频
+     * @param userId
+     * @return
+     */
+    List<TtVideo> queryUserUnUploadVideo(Integer userId);
+
+    /**
+     * 更新视频上传状态
+     * @param id
+     * @return
+     */
+    Boolean updateVideoUploadState(Integer id);
+
 }

@@ -265,4 +265,29 @@ public class ManagementServiceImpl implements ManagementService {
         return ttTaskAddFansList;
     }
 
+    public List<TtVideo> queryUserUnUploadVideo(Integer userId){
+        Example example=new Example(TtVideo.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("uploadState",0);
+        criteria.andEqualTo("isDelete",0);
+        List<TtVideo> ttVideos=videoMapper.selectByExample(example);
+        return ttVideos;
+    }
+
+    public Boolean updateVideoUploadState(Integer id){
+        TtVideo ttVideo=videoMapper.selectByPrimaryKey(id);
+        if(ttVideo==null){
+            log.info("要更新的视频不存在");
+            return false;
+        }
+        ttVideo.setUploadState(1);
+        int num=videoMapper.updateByPrimaryKeySelective(ttVideo);
+        if(num<1){
+            log.info("更新失败");
+            return false;
+        }
+        return true;
+    }
+
 }

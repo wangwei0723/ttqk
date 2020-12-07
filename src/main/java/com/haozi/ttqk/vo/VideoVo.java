@@ -17,6 +17,8 @@ public class VideoVo {
     private String userId;//email
     @ApiModelProperty(value = "标签ID")
     private Integer tagId;//标签ID
+    @ApiModelProperty(value = "标签值")
+    private String tagValue;//标签值
     @ApiModelProperty(value = "上传状态 0未上传 1已上传")
     private Integer uploadState;//上传状态 0未上传 1已上传
     @ApiModelProperty(value = "点赞数")
