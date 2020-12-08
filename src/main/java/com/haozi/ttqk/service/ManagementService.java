@@ -142,4 +142,18 @@ public interface ManagementService {
      */
     Boolean updateVideoUploadState(Integer id);
 
+    /**
+     * 保存ttTiktokVideo
+     * @param ttTiktokVideo
+     * @return
+     */
+    Boolean saveTiktokVideo(TtTiktokVideo ttTiktokVideo);
+
+    /**
+     * 保存TiktokAccount
+     * @param ttTiktokAccount
+     * @return
+     */
+    Boolean saveTiktokAccount(TtTiktokAccount ttTiktokAccount);
+
 }

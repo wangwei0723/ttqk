@@ -48,4 +48,6 @@ public class TikTokUserVo {
     private Integer fans;//粉丝数
     @ApiModelProperty(value = "视频数量")
     private Integer videos;//视频数量
+    @ApiModelProperty(value = "状态 0有效 1无效")
+    private Integer isDelete;
 }

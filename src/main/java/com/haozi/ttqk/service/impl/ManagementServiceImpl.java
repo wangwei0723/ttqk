@@ -3,9 +3,11 @@ package com.haozi.ttqk.service.impl;
 import com.haozi.ttqk.mapper.*;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
+import com.haozi.ttqk.util.Md5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -32,6 +34,10 @@ public class ManagementServiceImpl implements ManagementService {
     private TtTaskSendMapper ttTaskSendMapper;
     @Resource
     private TtTaskAddFansMapper ttTaskAddFansMapper;
+    @Resource
+    private TiktokVideoMapper tiktokVideoMapper;
+    @Resource
+    private TiktokAccountMapper tiktokAccountMapper;
 
     public Boolean savePhone(TtPhone ttPhone){
         if(ttPhone==null){
@@ -41,7 +47,7 @@ public class ManagementServiceImpl implements ManagementService {
         if(ttPhone.getId()==null){
             ttPhoneMapper.insertSelective(ttPhone);
         }else {
-            ttPhoneMapper.updateByPrimaryKey(ttPhone);
+            ttPhoneMapper.updateByPrimaryKeySelective(ttPhone);
         }
         return true;
     }
@@ -192,7 +198,7 @@ public class ManagementServiceImpl implements ManagementService {
         if(ttTaskTrainUser.getId()==null){
             ttTaskTrainUserMapper.insertSelective(ttTaskTrainUser);
         }else {
-            ttTaskTrainUserMapper.updateByPrimaryKey(ttTaskTrainUser);
+            ttTaskTrainUserMapper.updateByPrimaryKeySelective(ttTaskTrainUser);
         }
         return true;
     }
@@ -217,7 +223,7 @@ public class ManagementServiceImpl implements ManagementService {
         if(ttTaskSend.getId()==null){
             ttTaskSendMapper.insertSelective(ttTaskSend);
         }else {
-            ttTaskSendMapper.updateByPrimaryKey(ttTaskSend);
+            ttTaskSendMapper.updateByPrimaryKeySelective(ttTaskSend);
         }
         return true;
     }
@@ -248,7 +254,7 @@ public class ManagementServiceImpl implements ManagementService {
         if(ttTaskAddFans.getId()==null){
             ttTaskAddFansMapper.insertSelective(ttTaskAddFans);
         }else {
-            ttTaskAddFansMapper.updateByPrimaryKey(ttTaskAddFans);
+            ttTaskAddFansMapper.updateByPrimaryKeySelective(ttTaskAddFans);
         }
         return true;
     }
@@ -286,6 +292,70 @@ public class ManagementServiceImpl implements ManagementService {
         if(num<1){
             log.info("更新失败");
             return false;
+        }
+        return true;
+    }
+
+    public Boolean saveTiktokVideo(TtTiktokVideo ttTiktokVideo){
+        if(ttTiktokVideo==null){
+            log.info("ttTiktokVideo为空");
+            return false;
+        }
+        if(StringUtils.isEmpty(ttTiktokVideo.getName()) || ttTiktokVideo.getTagId()==null){
+            log.info("视频名称或标签ID为空");
+            return false;
+        }
+        String videoKey="";
+        try {
+            if(ttTiktokVideo.getName().length()>20){
+                videoKey= Md5Util.md5(ttTiktokVideo.getName().substring(0,20));
+            }else {
+                videoKey= Md5Util.md5(ttTiktokVideo.getName());
+            }
+        } catch (Exception e) {
+            log.info("md5出现异常",e);
+            return false;
+        }
+        ttTiktokVideo.setVideoKey(videoKey);
+        Example example=new Example(TtTiktokVideo.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("videoKey",ttTiktokVideo.getVideoKey());
+        criteria.andEqualTo("tagId",ttTiktokVideo.getTagId());
+        criteria.andEqualTo("isDelete",0);
+        List<TtTiktokVideo> ttTiktokVideos=tiktokVideoMapper.selectByExample(example);
+        if(!CollectionUtils.isEmpty(ttTiktokVideos)){
+            TtTiktokVideo ttTiktokVideoOld=ttTiktokVideos.get(0);
+            ttTiktokVideo.setId(ttTiktokVideoOld.getId());
+            tiktokVideoMapper.updateByPrimaryKeySelective(ttTiktokVideo);
+        }else {
+            tiktokVideoMapper.insertSelective(ttTiktokVideo);
+
+        }
+        return true;
+    }
+
+
+    public Boolean saveTiktokAccount(TtTiktokAccount ttTiktokAccount){
+        if(ttTiktokAccount==null){
+            log.info("ttTiktokAccount为空");
+            return false;
+        }
+        if(StringUtils.isEmpty(ttTiktokAccount.getTiktokName()) || ttTiktokAccount.getTagId()==null){
+            log.info("TiktokName或标签ID为空");
+            return false;
+        }
+        Example example=new Example(TtTiktokAccount.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("tiktokName",ttTiktokAccount.getTiktokName());
+        criteria.andEqualTo("tagId",ttTiktokAccount.getTagId());
+        criteria.andEqualTo("isDelete",0);
+        List<TtTiktokAccount> ttTiktokAccounts=tiktokAccountMapper.selectByExample(example);
+        if(!CollectionUtils.isEmpty(ttTiktokAccounts)){
+            TtTiktokAccount ttTiktokAccountOld=ttTiktokAccounts.get(0);
+            ttTiktokAccount.setId(ttTiktokAccountOld.getId());
+            tiktokAccountMapper.updateByPrimaryKeySelective(ttTiktokAccount);
+        }else {
+            tiktokAccountMapper.insertSelective(ttTiktokAccount);
         }
         return true;
     }

@@ -446,4 +446,54 @@ public class ManagementController {
         return ResponseUtil.success(true);
     }
 
+    @ApiOperation(value = "保存TiktokVideo", httpMethod = "POST")
+    @PostMapping("/saveTiktokVideo")
+    public ResultVo<String>  saveTiktokVideo(TiktokVideoVo tiktokVideoVo){
+        try {
+            if(tiktokVideoVo==null || tiktokVideoVo.getTagId()==null|| tiktokVideoVo.getName()==null){
+                log.info("必传参数为空");
+                if(tiktokVideoVo!=null){
+                    log.info("添加发送任务,[{}]",JSONObject.toJSONString(tiktokVideoVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtTiktokVideo ttTiktokVideo=new TtTiktokVideo();
+            BeanUtils.copyProperties(tiktokVideoVo,ttTiktokVideo);
+            Boolean flag=operationManagementService.saveTiktokVideo(ttTiktokVideo);
+            if(!flag){
+                log.info("保存TiktokVideo失败");
+                return ResponseUtil.fail("保存TiktokVideo失败");
+            }
+        } catch (Exception e) {
+            log.info("保存TiktokVideo出现异常",e);
+            return ResponseUtil.fail("保存TiktokVideo失败");
+        }
+        return ResponseUtil.success("保存成功");
+    }
+
+    @ApiOperation(value = "保存TiktokAccount", httpMethod = "POST")
+    @PostMapping("/saveTiktokAccount")
+    public ResultVo<String>  saveTiktokAccount(TiktokAccountVo tiktokAccountVo){
+        try {
+            if(tiktokAccountVo==null || tiktokAccountVo.getTagId()==null|| tiktokAccountVo.getTiktokName()==null){
+                log.info("必传参数为空");
+                if(tiktokAccountVo!=null){
+                    log.info("添加发送任务,[{}]",JSONObject.toJSONString(tiktokAccountVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtTiktokAccount ttTiktokAccount=new TtTiktokAccount();
+            BeanUtils.copyProperties(tiktokAccountVo,ttTiktokAccount);
+            Boolean flag=operationManagementService.saveTiktokAccount(ttTiktokAccount);
+            if(!flag){
+                log.info("保存TiktokAccount失败");
+                return ResponseUtil.fail("保存TiktokAccount失败");
+            }
+        } catch (Exception e) {
+            log.info("保存TiktokAccount出现异常",e);
+            return ResponseUtil.fail("保存TiktokAccount失败");
+        }
+        return ResponseUtil.success("保存成功");
+    }
+
 }
