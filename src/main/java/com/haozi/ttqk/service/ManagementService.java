@@ -78,7 +78,7 @@ public interface ManagementService {
      * 获取所有评论
      * @return
      */
-    List<TtComment> getAllComment();
+    List<TtComment> getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize);
 
     /**
      * 获取评论map

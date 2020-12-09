@@ -38,19 +38,19 @@ public class FileController {
             @ApiImplicitParam(name = "file", value = "文件", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "fileType", value = "文件类型 1、图片 2、视频", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "userId", value = "当前操作用户ID", required = true, dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "tiktokId", value = "tiktokId", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "tiktokUserId", value = "tiktokUserId", required = true, dataType = "String", paramType = "query"),
     })
     @PostMapping("/upload")
     public ResultVo<FileVo> upload(@RequestParam(value = "file", required = false) MultipartFile multipartFile,
-                           @RequestParam("userId")Integer userId,@RequestParam("tiktokId")String tiktokId,@RequestParam("fileType")Integer fileType) {
+                           @RequestParam("userId")Integer userId,@RequestParam("tiktokUserId")String tiktokUserId,@RequestParam("fileType")Integer fileType) {
         FileVo fileVo=new FileVo();
         try {
             String saveFileBasePath= SystemConstants.FILE_BASE_PATH;
 //            saveFileBasePath="C:\\Users\\wangwei\\Desktop\\临时文件\\";
 
             String uuid= UUID.randomUUID().toString();
-            if(tiktokId!=null){
-                saveFileBasePath=saveFileBasePath+tiktokId+ File.separator+uuid;
+            if(tiktokUserId!=null){
+                saveFileBasePath=saveFileBasePath+tiktokUserId+ File.separator+uuid;
             }else {
                 saveFileBasePath=saveFileBasePath+uuid;
             }
@@ -65,7 +65,7 @@ public class FileController {
             ttFile.setFileDirectory(fileEntity.getFilePath());
             ttFile.setFileName(fileEntity.getFileName());
             ttFile.setFileType(fileType);
-            ttFile.setTiktokId(tiktokId);
+            ttFile.setTiktokUserId(tiktokUserId);
             ttFile.setUserId(userId);
             ttFile.setFileUrl(fileUrl);
             Integer id=fileService.saveFileInfo(ttFile);
@@ -79,8 +79,8 @@ public class FileController {
                 String faceImgBasePath= SystemConstants.FILE_BASE_PATH;
 //            faceImgBasePath="C:\\Users\\wangwei\\Desktop\\临时文件\\";
                 String uuid2= UUID.randomUUID().toString();
-                if(tiktokId!=null){
-                    faceImgBasePath=faceImgBasePath+tiktokId+ File.separator+uuid2;
+                if(tiktokUserId!=null){
+                    faceImgBasePath=faceImgBasePath+tiktokUserId+ File.separator+uuid2;
                 }else {
                     faceImgBasePath=faceImgBasePath+uuid2;
                 }
@@ -93,7 +93,7 @@ public class FileController {
                 ttFaceFile.setFileDirectory(faceImgDictory);
                 ttFaceFile.setFileName(fileName+".jpg");
                 ttFaceFile.setFileType(2);
-                ttFaceFile.setTiktokId(tiktokId);
+                ttFaceFile.setTiktokUserId(tiktokUserId);
                 ttFaceFile.setUserId(userId);
                 ttFaceFile.setFileUrl(faceFileUrl);
                 Integer id2=fileService.saveFileInfo(ttFaceFile);

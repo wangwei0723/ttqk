@@ -228,12 +228,25 @@ public class ManagementController {
         return ResponseUtil.success(commentId);
     }
 
-    @ApiOperation(value = "查询所有评论", httpMethod = "POST")
-    @PostMapping("/getAllComment")
-    public ResultVo<List<TagVo>>  getAllComment(){
+    @ApiOperation(value = "查询评论", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "tagId", value = "标签ID", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "type", value = "评论类型 0  养号评论 1,截流评论  2私信内容", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "comment", value = "评论内容，支持模糊查询", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/getComment")
+    public ResultVo<List<TagVo>>  getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize){
         List<CommentVo> commentVos=new ArrayList<>();
         try {
-            List<TtComment> ttComments= operationManagementService.getAllComment();
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
+            List<TtComment> ttComments= operationManagementService.getComment(tagId,type,comment,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(ttComments)){
                 for (TtComment ttComment:ttComments) {
                     CommentVo commentVo=new CommentVo();

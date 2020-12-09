@@ -26,7 +26,7 @@ public class FileServiceImpl implements FileService {
             log.info("tttTag为空");
             return null;
         }
-        if(ttFile.getUuid()==null || ttFile.getFileDirectory()==null||ttFile.getFileName()==null || ttFile.getFileUrl()==null||ttFile.getTiktokId()==null){
+        if(ttFile.getUuid()==null || ttFile.getFileDirectory()==null||ttFile.getFileName()==null || ttFile.getFileUrl()==null||ttFile.getTiktokUserId()==null){
             log.info("保存文件信息缺少必传参数,[{}]", JSONObject.toJSONString(ttFile));
             return null;
         }

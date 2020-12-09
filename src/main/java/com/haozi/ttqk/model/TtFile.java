@@ -22,7 +22,7 @@ public class TtFile {
     private String fileName;//文件名称
     private Integer fileType;//文件类型
     private String fileDirectory;//文件存储目录
-    private String tiktokId;//tiktok用户ID
+    private String tiktokUserId;//tiktokUserId用户ID
     private Integer userId;//文件上传操作人ID
     private Date createdTime;
     private Date updateTime;

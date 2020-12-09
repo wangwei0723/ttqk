@@ -7,6 +7,8 @@ import java.util.Date;
 
 @Data
 public class CommentVo {
+    @ApiModelProperty(value = "ID")
+    private Integer id;
     @ApiModelProperty(value = "标签ID")
     private Integer tagId;
     @ApiModelProperty(value = "评论内容")

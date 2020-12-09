@@ -1,5 +1,7 @@
 package com.haozi.ttqk.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.haozi.ttqk.mapper.*;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
@@ -168,6 +170,25 @@ public class ManagementServiceImpl implements ManagementService {
         }
         commentMapper.insertSelective(ttComment);
         return ttComment.getId();
+    }
+
+    public List<TtComment> getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
+        Example example=new Example(TtComment.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDelete",0);
+        if(tagId!=null){
+            criteria.andEqualTo("tagId",tagId);
+        }
+        if(type!=null){
+            criteria.andEqualTo("type",type);
+        }
+        if(!StringUtils.isEmpty(comment)){
+            criteria.andLike("comment","%"+comment+"%");
+        }
+        example.setOrderByClause("created_time desc");
+        List<TtComment> ttComments=new PageInfo<TtComment>(commentMapper.selectByExample(example)).getList();
+        return ttComments;
     }
 
     public List<TtComment> getAllComment(){
