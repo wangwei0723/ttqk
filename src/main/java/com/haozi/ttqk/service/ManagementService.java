@@ -18,7 +18,7 @@ public interface ManagementService {
      * @param ttPhone
      * @return
      */
-    List<TtPhone> queryPhone(TtPhone ttPhone);
+    List<TtPhone> queryPhone(TtPhone ttPhone,Integer pageNo,Integer pageSize);
 
     /**
      * 保存tiktok用户
@@ -32,7 +32,7 @@ public interface ManagementService {
      * @param tiktokUser
      * @return
      */
-    List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser);
+    List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser,Integer pageNo,Integer pageSize);
 
     /**
      * 保存标签
@@ -98,7 +98,7 @@ public interface ManagementService {
      * @param ttTaskTrainUser
      * @return
      */
-    List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser);
+    List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser,Integer pageNo,Integer pageSize);
 
     /**
      * 保存发送任务
@@ -112,7 +112,7 @@ public interface ManagementService {
      * @param ttTaskSend
      * @return
      */
-    List<TtTaskSend> queryTaskSend(TtTaskSend ttTaskSend);
+    List<TtTaskSend> queryTaskSend(TtTaskSend ttTaskSend,Integer pageNo,Integer pageSize);
 
     /**
      * 保存添加粉丝
@@ -126,14 +126,14 @@ public interface ManagementService {
      * @param ttTaskAddFans
      * @return
      */
-    List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans);
+    List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans,Integer pageNo,Integer pageSize);
 
     /**
      * 获取用户所有未上传的视频
      * @param userId
      * @return
      */
-    List<TtVideo> queryUserUnUploadVideo(Integer userId);
+    List<TtVideo> queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize);
 
     /**
      * 更新视频上传状态

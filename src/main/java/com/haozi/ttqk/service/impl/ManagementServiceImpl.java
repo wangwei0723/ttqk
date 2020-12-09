@@ -54,7 +54,8 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
-    public List<TtPhone> queryPhone(TtPhone ttPhone){
+    public List<TtPhone> queryPhone(TtPhone ttPhone,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtPhone.class);
         Example.Criteria criteria = example.createCriteria();
         if(ttPhone!=null){
@@ -65,7 +66,7 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andLike("phoneModel","%"+ttPhone.getPhoneModel()+"%");
             }
         }
-        List<TtPhone> ttPhones=ttPhoneMapper.selectByExample(example);
+        List<TtPhone> ttPhones=new PageInfo<TtPhone>(ttPhoneMapper.selectByExample(example)).getList();
         return ttPhones;
     }
 
@@ -74,13 +75,19 @@ public class ManagementServiceImpl implements ManagementService {
             log.info("tiktokUser为空");
             return false;
         }
-        tiktokUserMapper.insertSelective(tiktokUser);
+        if(tiktokUser.getId()==null){
+            tiktokUserMapper.insertSelective(tiktokUser);
+        }else {
+            tiktokUserMapper.updateByPrimaryKeySelective(tiktokUser);
+        }
         return true;
     }
 
-    public List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser){
+    public List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TiktokUser.class);
         Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDelete",0);
         if(tiktokUser!=null){
             if(tiktokUser.getUserId()!=null){
                 criteria.andEqualTo("userId",tiktokUser.getUserId());
@@ -107,7 +114,7 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("merchantId",tiktokUser.getMerchantId());
             }
         }
-        List<TiktokUser> tiktokUsers=tiktokUserMapper.selectByExample(example);
+        List<TiktokUser> tiktokUsers=new PageInfo<TiktokUser>(tiktokUserMapper.selectByExample(example)).getList();
         return tiktokUsers;
     }
 
@@ -224,7 +231,8 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
-    public List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser){
+    public List<TtTaskTrainUser> queryTaskTrainUser(TtTaskTrainUser ttTaskTrainUser,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtTaskTrainUser.class);
         Example.Criteria criteria = example.createCriteria();
         if(ttTaskTrainUser!=null){
@@ -232,7 +240,8 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("tagId",ttTaskTrainUser.getTagId());
             }
         }
-        List<TtTaskTrainUser> taskTrainUsers=ttTaskTrainUserMapper.selectByExample(example);
+        criteria.andEqualTo("isDelete",0);
+        List<TtTaskTrainUser> taskTrainUsers=new PageInfo<TtTaskTrainUser>(ttTaskTrainUserMapper.selectByExample(example)).getList();
         return taskTrainUsers;
     }
 
@@ -249,7 +258,8 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
-    public List<TtTaskSend> queryTaskSend(TtTaskSend ttTaskSend){
+    public List<TtTaskSend> queryTaskSend(TtTaskSend ttTaskSend,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtTaskSend.class);
         Example.Criteria criteria = example.createCriteria();
         if(ttTaskSend!=null){
@@ -263,7 +273,7 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("commentId",ttTaskSend.getCommentId());
             }
         }
-        List<TtTaskSend> ttTaskSends=ttTaskSendMapper.selectByExample(example);
+        List<TtTaskSend> ttTaskSends=new PageInfo<TtTaskSend>(ttTaskSendMapper.selectByExample(example)).getList();
         return ttTaskSends;
     }
 
@@ -280,7 +290,8 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
-    public List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans){
+    public List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtTaskAddFans.class);
         Example.Criteria criteria = example.createCriteria();
         if(ttTaskAddFans!=null){
@@ -288,17 +299,18 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("tagId",ttTaskAddFans.getTagId());
             }
         }
-        List<TtTaskAddFans> ttTaskAddFansList=ttTaskAddFansMapper.selectByExample(example);
+        List<TtTaskAddFans> ttTaskAddFansList=new PageInfo<TtTaskAddFans>(ttTaskAddFansMapper.selectByExample(example)).getList();
         return ttTaskAddFansList;
     }
 
-    public List<TtVideo> queryUserUnUploadVideo(Integer userId){
+    public List<TtVideo> queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtVideo.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("userId",userId);
         criteria.andEqualTo("uploadState",0);
         criteria.andEqualTo("isDelete",0);
-        List<TtVideo> ttVideos=videoMapper.selectByExample(example);
+        List<TtVideo> ttVideos=new PageInfo<TtVideo>(videoMapper.selectByExample(example)).getList();
         return ttVideos;
     }
 

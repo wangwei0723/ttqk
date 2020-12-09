@@ -49,15 +49,25 @@ public class ManagementController {
     }
 
     @ApiOperation(value = "查询手机", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/queryMoblie")
-    public ResultVo<List<PhoneVo>>  queryMoblie(PhoneVo phoneVo){
+    public ResultVo<List<PhoneVo>>  queryMoblie(PhoneVo phoneVo,Integer pageNo,Integer pageSize){
         List<PhoneVo> phoneVos=new ArrayList<>();
         try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
             TtPhone ttPhone=new TtPhone();
             if(phoneVo!=null){
                 BeanUtils.copyProperties(phoneVo,ttPhone);
             }
-            List<TtPhone> ttPhones= operationManagementService.queryPhone(ttPhone);
+            List<TtPhone> ttPhones= operationManagementService.queryPhone(ttPhone,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(ttPhones)){
                 for (TtPhone ttPhone1:ttPhones) {
                     PhoneVo phoneVo1=new PhoneVo();
@@ -94,15 +104,25 @@ public class ManagementController {
     }
 
     @ApiOperation(value = "查询Tiktok用户", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/queryTiktokUser")
-    public ResultVo<List<TikTokUserVo>>  queryTiktokUser(TikTokUserVo tikTokUserVo){
+    public ResultVo<List<TikTokUserVo>>  queryTiktokUser(TikTokUserVo tikTokUserVo,Integer pageNo,Integer pageSize){
         List<TikTokUserVo> tikTokUserVos=new ArrayList<>();
         try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
             TiktokUser tiktokUser=new TiktokUser();
             if(tikTokUserVo!=null){
                 BeanUtils.copyProperties(tikTokUserVo,tiktokUser);
             }
-            List<TiktokUser> tiktokUsers= operationManagementService.queryTiktokUser(tiktokUser);
+            List<TiktokUser> tiktokUsers= operationManagementService.queryTiktokUser(tiktokUser,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(tiktokUsers)){
                 Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 for (TiktokUser tiktokUser1:tiktokUsers) {
@@ -280,15 +300,25 @@ public class ManagementController {
     }
 
     @ApiOperation(value = "查询养号任务", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/queryTaskTrainUser")
-    public ResultVo<List<TaskTrainUserVo>>  queryTaskTrainUser(TaskTrainUserVo taskTrainUserVo){
+    public ResultVo<List<TaskTrainUserVo>>  queryTaskTrainUser(TaskTrainUserVo taskTrainUserVo,Integer pageNo,Integer pageSize){
         List<TaskTrainUserVo> taskTrainUserVos=new ArrayList<>();
         try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
             TtTaskTrainUser ttTaskTrainUser=new TtTaskTrainUser();
             if(taskTrainUserVo!=null){
                 BeanUtils.copyProperties(taskTrainUserVo,ttTaskTrainUser);
             }
-            List<TtTaskTrainUser> taskTrainUsers= operationManagementService.queryTaskTrainUser(ttTaskTrainUser);
+            List<TtTaskTrainUser> taskTrainUsers= operationManagementService.queryTaskTrainUser(ttTaskTrainUser,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(taskTrainUsers)){
                 Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 for (TtTaskTrainUser ttTaskTrainUser1:taskTrainUsers) {
@@ -332,15 +362,25 @@ public class ManagementController {
     }
 
     @ApiOperation(value = "查询发送任务", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/queryTaskSend")
-    public ResultVo<List<TaskSendVo>>  queryTaskSend(TaskSendVo taskSendVo){
+    public ResultVo<List<TaskSendVo>>  queryTaskSend(TaskSendVo taskSendVo,Integer pageNo,Integer pageSize){
         List<TaskSendVo> taskSendVos=new ArrayList<>();
         try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
             TtTaskSend ttTaskSend=new TtTaskSend();
             if(taskSendVo!=null){
                 BeanUtils.copyProperties(taskSendVo,ttTaskSend);
             }
-            List<TtTaskSend> ttTaskSends= operationManagementService.queryTaskSend(ttTaskSend);
+            List<TtTaskSend> ttTaskSends= operationManagementService.queryTaskSend(ttTaskSend,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(ttTaskSends)){
                 Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 Map<Integer,String> commentMap=operationManagementService.getCommentMap();
@@ -381,15 +421,25 @@ public class ManagementController {
     }
 
     @ApiOperation(value = "查询添加粉丝", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
     @PostMapping("/queryTaskAddFans")
-    public ResultVo<List<TaskAddFansVo>>  queryTaskAddFans(TaskAddFansVo taskAddFansVo){
+    public ResultVo<List<TaskAddFansVo>>  queryTaskAddFans(TaskAddFansVo taskAddFansVo,Integer pageNo,Integer pageSize){
         List<TaskAddFansVo> taskAddFansVos=new ArrayList<>();
         try {
             TtTaskAddFans ttTaskAddFans=new TtTaskAddFans();
             if(taskAddFansVo!=null){
                 BeanUtils.copyProperties(taskAddFansVo,ttTaskAddFans);
             }
-            List<TtTaskAddFans> ttTaskAddFansList= operationManagementService.queryTaskAddFans(ttTaskAddFans);
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
+            List<TtTaskAddFans> ttTaskAddFansList= operationManagementService.queryTaskAddFans(ttTaskAddFans,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(ttTaskAddFansList)){
                 Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 for (TtTaskAddFans ttTaskAddFans1:ttTaskAddFansList) {
@@ -409,16 +459,24 @@ public class ManagementController {
     @ApiOperation(value = "查询用户未上传视频", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "userId", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
     })
     @PostMapping("/queryUserUnUploadVideo")
-    public ResultVo<List<VideoVo>>  queryUserUnUploadVideo(Integer userId){
+    public ResultVo<List<VideoVo>>  queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize){
         List<VideoVo> videoVos=new ArrayList<>();
         try {
             if(userId==null){
                 log.info("用户id不能为空");
                 return ResponseUtil.fail("userId不能为空");
             }
-            List<TtVideo> ttVideos= operationManagementService.queryUserUnUploadVideo(userId);
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
+            List<TtVideo> ttVideos= operationManagementService.queryUserUnUploadVideo(userId,pageNo,pageSize);
             if(!CollectionUtils.isEmpty(ttVideos)){
                 Map<Integer,String> tagMap= operationManagementService.getTagMap();
                 for (TtVideo ttVideo:ttVideos) {

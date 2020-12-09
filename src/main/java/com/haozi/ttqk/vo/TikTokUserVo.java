@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 public class TikTokUserVo {
-
+    @ApiModelProperty(value = "ID")
+    private Integer id;
     @ApiModelProperty(value = "用户标识(email等)")
     private String userId;//用户标识（email）
     @ApiModelProperty(value = "用户名")
