@@ -32,7 +32,7 @@ public class TiktokUser {
     private String introduction;//简介
     private String phoneId;//手机设备ID
     private String url;//个人主页
-    private Integer update;//是否在手机上更新  0未更新  1更新
+    private Integer updateState;//是否在手机上更新  0未更新  1更新
     private Integer look;//观看视频数
     private Integer great;
     private Integer comment;//评论数

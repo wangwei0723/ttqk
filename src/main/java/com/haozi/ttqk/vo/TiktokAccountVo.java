@@ -9,6 +9,8 @@ public class TiktokAccountVo {
     private Integer id;
     @ApiModelProperty(value = "账号")
     private String tiktokName;//账号
+    @ApiModelProperty(value = "UserName")
+    private String tiktokUserName;//账号
     @ApiModelProperty(value = "标签ID")
     private Integer tagId;//标签ID
     @ApiModelProperty(value = "标签值")

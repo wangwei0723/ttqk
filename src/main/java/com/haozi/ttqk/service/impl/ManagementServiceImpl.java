@@ -7,6 +7,7 @@ import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
 import com.haozi.ttqk.util.Md5Util;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -81,6 +82,10 @@ public class ManagementServiceImpl implements ManagementService {
             tiktokUserMapper.updateByPrimaryKeySelective(tiktokUser);
         }
         return true;
+    }
+
+    public Integer checkIsUserExist(String userId, String name, String tiktokId){
+        return tiktokUserMapper.checkIsUserExist(userId,name,tiktokId);
     }
 
     public List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser,Integer pageNo,Integer pageSize){

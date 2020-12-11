@@ -36,7 +36,7 @@ public class TikTokUserVo {
     @ApiModelProperty(value = "个人主页")
     private String url;//个人主页
     @ApiModelProperty(value = "是否在手机上更新  0未更新  1更新")
-    private Integer update;//是否在手机上更新  0未更新  1更新
+    private Integer updateState;//是否在手机上更新  0未更新  1更新
     @ApiModelProperty(value = "观看视频数")
     private Integer look;//观看视频数
     @ApiModelProperty(value = "。。。")

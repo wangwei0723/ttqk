@@ -18,6 +18,7 @@ public class TtTiktokAccount {
     @Column(name = "ID", unique = true, nullable = false)
     private Integer id;
     private String tiktokName;//账号
+    private String tiktokUserName;//账号
     private Integer tagId;//标签ID
     private Integer follow;//'关注数'
     private Integer fans;//粉丝数

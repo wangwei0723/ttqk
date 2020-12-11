@@ -95,6 +95,13 @@ public class ManagementController {
             }
             TiktokUser tiktokUser=new TiktokUser();
             BeanUtils.copyProperties(tikTokUserVo,tiktokUser);
+            if(tiktokUser.getId()==null){
+                Integer num=operationManagementService.checkIsUserExist(tikTokUserVo.getUserId(),tikTokUserVo.getName(),tikTokUserVo.getTiktokId());
+                if(num>0){
+                    log.info("用户已存在,userId[{}],name[{}],tiktokId[{}]", tikTokUserVo.getUserId(),tikTokUserVo.getName(),tikTokUserVo.getTiktokId());
+                    return ResponseUtil.fail("用户已存在，不能重复添加");
+                }
+            }
             operationManagementService.saveTiktokUser(tiktokUser);
         } catch (Exception e) {
             log.info("保存tiktok用户出现异常",e);

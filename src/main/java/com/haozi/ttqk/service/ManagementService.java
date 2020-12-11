@@ -28,6 +28,15 @@ public interface ManagementService {
     Boolean saveTiktokUser(TiktokUser tiktokUser);
 
     /**
+     * 校验用户是否存在
+     * @param userId
+     * @param name
+     * @param tiktokId
+     * @return
+     */
+    Integer checkIsUserExist(String userId, String name, String tiktokId);
+
+    /**
      * 查询tiktok用户
      * @param tiktokUser
      * @return
