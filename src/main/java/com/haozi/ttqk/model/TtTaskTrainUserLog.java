@@ -22,7 +22,7 @@ public class TtTaskTrainUserLog {
     private Integer tagId;
     private Integer isgreat;
     private Integer iscomment;
-    private Integer commentTime;
+    private Date commentTime;
     private Date createdTime;
     private Date updateTime;
     private Integer isDelete;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haozi.ttqk.mapper.TtTaskTrainUserLogMapper">
+
+    <select id="queryTaskTrainUserLog" resultType="com.haozi.ttqk.model.TtTaskTrainUserLog">
+        SELECT * from tt_task_train_user_log where is_delete=0
+        <if test="userId!=null">
+        and user_id=#{userId}
+        </if>
+        <if test="videoKeys!=null and videoKeys.size()>0">
+            AND  video_key in
+            <foreach collection="videoKeys" item="videoKey" open="(" close=")" separator=",">
+                #{videoKey}
+            </foreach>
+        </if>
+        limit #{index},#{pageSize}
+    </select>
+
+
+
+</mapper>

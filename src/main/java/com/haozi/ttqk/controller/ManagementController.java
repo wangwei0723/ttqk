@@ -3,6 +3,7 @@ package com.haozi.ttqk.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
+import com.haozi.ttqk.util.DateUtils;
 import com.haozi.ttqk.util.ResponseUtil;
 import com.haozi.ttqk.vo.*;
 import io.swagger.annotations.Api;
@@ -572,6 +573,72 @@ public class ManagementController {
             return ResponseUtil.fail("保存TiktokAccount失败");
         }
         return ResponseUtil.success("保存成功");
+    }
+    @ApiOperation(value = "保存TaskTrainUserLog", httpMethod = "POST")
+    @PostMapping("/saveTaskTrainUserLog")
+    public ResultVo<String>  saveTaskTrainUserLog(TaskTrainUserLogVo taskTrainUserLogVo){
+        try {
+            if(taskTrainUserLogVo==null || taskTrainUserLogVo.getUserId()==null|| StringUtils.isEmpty(taskTrainUserLogVo.getVideoKey())){
+                log.info("必传参数为空");
+                if(taskTrainUserLogVo!=null){
+                    log.info("添加TaskTrainUserLog,[{}]",JSONObject.toJSONString(taskTrainUserLogVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtTaskTrainUserLog ttTaskTrainUserLog=new TtTaskTrainUserLog();
+            BeanUtils.copyProperties(taskTrainUserLogVo,ttTaskTrainUserLog);
+            if(!StringUtils.isEmpty(taskTrainUserLogVo.getCommentTime())){
+                ttTaskTrainUserLog.setCommentTime(DateUtils.parseDateSecondFormat(taskTrainUserLogVo.getCommentTime()));
+            }
+            Boolean flag=operationManagementService.saveTaskTrainUserLog(ttTaskTrainUserLog);
+            if(!flag){
+                log.info("保存TaskTrainUserLog失败");
+                return ResponseUtil.fail("保存TaskTrainUserLog失败");
+            }
+        } catch (Exception e) {
+            log.info("保存TaskTrainUserLog出现异常",e);
+            return ResponseUtil.fail("保存TaskTrainUserLog失败");
+        }
+        return ResponseUtil.success("保存成功");
+    }
+
+    @ApiOperation(value = "查询TaskTrainUserLog", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "userId", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "videoKey", value = "userId", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/queryTaskTrainUserLog")
+    public ResultVo<List<TaskTrainUserLogVo>>  queryTaskTrainUserLog(Integer userId,String videoKey,Integer pageNo,Integer pageSize){
+        List<TaskTrainUserLogVo> taskTrainUserLogVos=new ArrayList<>();
+        try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
+            List<TtTaskTrainUserLog> ttTaskTrainUserLogs= operationManagementService.queryTaskTrainUserLog(userId,videoKey,pageNo,pageSize);
+            if(!CollectionUtils.isEmpty(ttTaskTrainUserLogs)){
+                Map<Integer,String> tagMap= operationManagementService.getTagMap();
+                for (TtTaskTrainUserLog ttTaskTrainUserLog:ttTaskTrainUserLogs) {
+                    TaskTrainUserLogVo taskTrainUserLogVo=new TaskTrainUserLogVo();
+                    BeanUtils.copyProperties(ttTaskTrainUserLog,taskTrainUserLogVo);
+                    if(ttTaskTrainUserLog.getCommentTime()!=null){
+                        taskTrainUserLogVo.setCommentTime(DateUtils.dateToFormatString(ttTaskTrainUserLog.getCommentTime()));
+                    }
+                    if(ttTaskTrainUserLog.getTagId()!=null){
+                        taskTrainUserLogVo.setTagValue(tagMap.get(ttTaskTrainUserLog.getTagId()));
+                    }
+                    taskTrainUserLogVos.add(taskTrainUserLogVo);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询TaskTrainUserLog出现异常",e);
+            return ResponseUtil.fail("查询TaskTrainUserLog失败");
+        }
+        return ResponseUtil.success(taskTrainUserLogVos);
     }
 
 }

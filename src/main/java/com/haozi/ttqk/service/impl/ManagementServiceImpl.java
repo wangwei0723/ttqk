@@ -14,9 +14,7 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service("operationManagementService")
@@ -41,6 +39,8 @@ public class ManagementServiceImpl implements ManagementService {
     private TiktokVideoMapper tiktokVideoMapper;
     @Resource
     private TiktokAccountMapper tiktokAccountMapper;
+    @Resource
+    private TtTaskTrainUserLogMapper ttTaskTrainUserLogMapper;
 
     public Boolean savePhone(TtPhone ttPhone){
         if(ttPhone==null){
@@ -396,6 +396,41 @@ public class ManagementServiceImpl implements ManagementService {
             tiktokAccountMapper.insertSelective(ttTiktokAccount);
         }
         return true;
+    }
+
+    public Boolean saveTaskTrainUserLog(TtTaskTrainUserLog ttTaskTrainUserLog){
+        if(ttTaskTrainUserLog==null){
+            log.info("ttTiktokAccount为空");
+            return false;
+        }
+        if(StringUtils.isEmpty(ttTaskTrainUserLog.getVideoKey()) || ttTaskTrainUserLog.getUserId()==null){
+            log.info("VideoKey或标签UserId为空");
+            return false;
+        }
+        Example example=new Example(TtTaskTrainUserLog.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId",ttTaskTrainUserLog.getUserId());
+        criteria.andEqualTo("videoKey",ttTaskTrainUserLog.getVideoKey());
+        criteria.andEqualTo("isDelete",0);
+        List<TtTaskTrainUserLog> ttTaskTrainUserLogs=ttTaskTrainUserLogMapper.selectByExample(example);
+        if(!CollectionUtils.isEmpty(ttTaskTrainUserLogs)){
+            TtTaskTrainUserLog ttTiktokAccountOld=ttTaskTrainUserLogs.get(0);
+            ttTaskTrainUserLog.setId(ttTiktokAccountOld.getId());
+            ttTaskTrainUserLogMapper.updateByPrimaryKeySelective(ttTaskTrainUserLog);
+        }else {
+            ttTaskTrainUserLogMapper.insertSelective(ttTaskTrainUserLog);
+        }
+        return true;
+    }
+
+    public List<TtTaskTrainUserLog> queryTaskTrainUserLog(Integer userId,String videoKey,Integer pageNo,Integer pageSize){
+        List<String> videoKeys=new ArrayList<>();
+        if(!StringUtils.isEmpty(videoKey)){
+            String[] videoArr=videoKey.split(",");
+            videoKeys=Arrays.asList(videoArr);
+        }
+        Integer index=(pageNo-1)*pageSize;
+        return ttTaskTrainUserLogMapper.queryTaskTrainUserLog(userId,videoKeys,index,pageSize);
     }
 
 }

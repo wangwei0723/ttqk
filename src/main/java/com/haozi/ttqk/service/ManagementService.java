@@ -165,4 +165,21 @@ public interface ManagementService {
      */
     Boolean saveTiktokAccount(TtTiktokAccount ttTiktokAccount);
 
+    /**
+     * 保存askTrainUserLog
+     * @param ttTaskTrainUserLog
+     * @return
+     */
+    Boolean saveTaskTrainUserLog(TtTaskTrainUserLog ttTaskTrainUserLog);
+
+    /**
+     * 查询askTrainUserLog
+     * @param userId
+     * @param videoKey
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<TtTaskTrainUserLog> queryTaskTrainUserLog(Integer userId,String videoKey,Integer pageNo,Integer pageSize);
+
 }
