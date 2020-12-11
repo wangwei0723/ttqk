@@ -20,7 +20,8 @@ public class TtTiktokVideo {
     private String name;//视频名
     private String videoKey;//视频名称前20位md5
     private Integer tagId;//标签ID
-    private Long accountId;//tiktok上传者
+    private String tiktokName;//tiktok上传者
+    private String tiktokUserName;//上传者username
     private Integer great;//点赞数
     private String date;//日期
     private Integer comment;//评论数

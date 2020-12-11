@@ -16,7 +16,9 @@ public class TiktokVideoVo {
     @ApiModelProperty(value = "标签值")
     private String tagValue;//标签值
     @ApiModelProperty(value = "tiktok上传者")
-    private Long accountId;//tiktok上传者
+    private String tiktokName;//tiktok上传者
+    @ApiModelProperty(value = "上传者username")
+    private String tiktokUserName;//上传者username
     @ApiModelProperty(value = "点赞数")
     private Integer great;//点赞数
     @ApiModelProperty(value = "日期")
