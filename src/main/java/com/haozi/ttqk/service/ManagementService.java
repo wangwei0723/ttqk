@@ -124,6 +124,22 @@ public interface ManagementService {
     List<TtTaskSend> queryTaskSend(TtTaskSend ttTaskSend,Integer pageNo,Integer pageSize);
 
     /**
+     * 保存TaskSendLog
+     * @param ttTaskSendLog
+     * @return
+     */
+    Boolean saveTaskSendLog(TtTaskSendLog ttTaskSendLog);
+
+    /**
+     * 查询TaskSendLog
+     * @param ttTaskSendLog
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    List<TtTaskSendLog> queryTaskSendLog(TtTaskSendLog ttTaskSendLog,Integer pageNo,Integer pageSize);
+
+    /**
      * 保存添加粉丝
      * @param ttTaskAddFans
      * @return

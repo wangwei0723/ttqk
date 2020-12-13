@@ -407,6 +407,61 @@ public class ManagementController {
         return ResponseUtil.success(taskSendVos);
     }
 
+    @ApiOperation(value = "添加发送任务日志", httpMethod = "POST")
+    @PostMapping("/saveTaskSendLog")
+    public ResultVo<String>  saveTaskSendLog(TaskSendLogVo taskSendLogVo){
+        try {
+            if(taskSendLogVo==null || taskSendLogVo.getVideoId()==null|| taskSendLogVo.getTaskId()==null  ){
+                log.info("必传参数为空");
+                if(taskSendLogVo!=null){
+                    log.info("添加发送任务日志,[{}]",JSONObject.toJSONString(taskSendLogVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TtTaskSendLog ttTaskSendLog=new TtTaskSendLog();
+            BeanUtils.copyProperties(taskSendLogVo,ttTaskSendLog);
+            operationManagementService.saveTaskSendLog(ttTaskSendLog);
+        } catch (Exception e) {
+            log.info("添加发送任务日志出现异常",e);
+            return ResponseUtil.fail("添加发送任务日志失败");
+        }
+        return ResponseUtil.success("添加成功");
+    }
+
+    @ApiOperation(value = "查询发送任务日志", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/queryTaskSendLog")
+    public ResultVo<List<TaskSendLogVo>>  queryTaskSendLog(TaskSendLogVo taskSendLogVo,Integer pageNo,Integer pageSize){
+        List<TaskSendLogVo> taskSendLogVos=new ArrayList<>();
+        try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
+            TtTaskSendLog ttTaskSendLog=new TtTaskSendLog();
+            if(taskSendLogVo!=null){
+                BeanUtils.copyProperties(taskSendLogVo,ttTaskSendLog);
+            }
+            List<TtTaskSendLog> ttTaskSendLogs= operationManagementService.queryTaskSendLog(ttTaskSendLog,pageNo,pageSize);
+            if(!CollectionUtils.isEmpty(ttTaskSendLogs)){
+                for (TtTaskSendLog ttTaskSendLog1:ttTaskSendLogs) {
+                    TaskSendLogVo taskSendLogVo1=new TaskSendLogVo();
+                    BeanUtils.copyProperties(ttTaskSendLog1,taskSendLogVo1);
+                    taskSendLogVos.add(taskSendLogVo1);
+                }
+            }
+        } catch (Exception e) {
+            log.info("查询发送任务日志出现异常",e);
+            return ResponseUtil.fail("查询发送任务日志失败");
+        }
+        return ResponseUtil.success(taskSendLogVos);
+    }
+
     @ApiOperation(value = "保存添加粉丝", httpMethod = "POST")
     @PostMapping("/saveTaskAddFans")
     public ResultVo<String>  saveTaskAddFans(TaskAddFansVo taskAddFansVo){

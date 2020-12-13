@@ -41,6 +41,8 @@ public class ManagementServiceImpl implements ManagementService {
     private TiktokAccountMapper tiktokAccountMapper;
     @Resource
     private TtTaskTrainUserLogMapper ttTaskTrainUserLogMapper;
+    @Resource
+    private TtTaskSendLogMapper ttTaskSendLogMapper;
 
     public Boolean savePhone(TtPhone ttPhone){
         if(ttPhone==null){
@@ -280,6 +282,41 @@ public class ManagementServiceImpl implements ManagementService {
         }
         List<TtTaskSend> ttTaskSends=new PageInfo<TtTaskSend>(ttTaskSendMapper.selectByExample(example)).getList();
         return ttTaskSends;
+    }
+
+    public Boolean saveTaskSendLog(TtTaskSendLog ttTaskSendLog){
+        if(ttTaskSendLog==null){
+            log.info("ttTaskSendLog为空");
+            return false;
+        }
+        if(ttTaskSendLog.getId()==null){
+            ttTaskSendLogMapper.insertSelective(ttTaskSendLog);
+        }else {
+            ttTaskSendLogMapper.updateByPrimaryKeySelective(ttTaskSendLog);
+        }
+        return true;
+    }
+
+    public List<TtTaskSendLog> queryTaskSendLog(TtTaskSendLog ttTaskSendLog,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
+        Example example=new Example(TtTaskSendLog.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(ttTaskSendLog!=null){
+            if(ttTaskSendLog.getTaskId()!=null){
+                criteria.andEqualTo("taskId",ttTaskSendLog.getTaskId());
+            }
+            if(ttTaskSendLog.getVideoId()!=null){
+                criteria.andEqualTo("videoId",ttTaskSendLog.getVideoId());
+            }
+            if(ttTaskSendLog.getAccountId()!=null){
+                criteria.andEqualTo("accountId",ttTaskSendLog.getAccountId());
+            }
+            if(ttTaskSendLog.getUserId()!=null){
+                criteria.andEqualTo("userId",ttTaskSendLog.getUserId());
+            }
+        }
+        List<TtTaskSendLog> ttTaskSendLogs=new PageInfo<TtTaskSendLog>(ttTaskSendLogMapper.selectByExample(example)).getList();
+        return ttTaskSendLogs;
     }
 
     public Boolean saveTaskAddFans(TtTaskAddFans ttTaskAddFans){
