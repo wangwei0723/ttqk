@@ -47,8 +47,12 @@ public class TikTokUserVo {
     private Integer follow;//关注数
     @ApiModelProperty(value = "粉丝数")
     private Integer fans;//粉丝数
+    @ApiModelProperty(value = "被分享数")
+    private Integer link;//被分享数
     @ApiModelProperty(value = "视频数量")
     private Integer videos;//视频数量
     @ApiModelProperty(value = "状态 0有效 1无效")
     private Integer isDelete;
+    @ApiModelProperty(value = "创建时间")
+    private String createdTime;//创建时间
 }

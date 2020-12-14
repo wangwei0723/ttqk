@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.haozi.ttqk.mapper.*;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
+import com.haozi.ttqk.util.DateUtils;
 import com.haozi.ttqk.util.Md5Util;
 import com.haozi.ttqk.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -149,6 +150,7 @@ public class ManagementServiceImpl implements ManagementService {
                 TikTokUserVo tikTokUserVo1=new TikTokUserVo();
                 BeanUtils.copyProperties(tiktokUser1,tikTokUserVo1);
                 tikTokUserVo1.setTagValue(tagMap.get(tiktokUser1.getTagId()));
+                tikTokUserVo1.setCreatedTime(DateUtils.dateToFormatString(tiktokUser1.getCreatedTime()));
                 tikTokUserVos.add(tikTokUserVo1);
             }
         }

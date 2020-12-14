@@ -38,6 +38,7 @@ public class TiktokUser {
     private Integer comment;//评论数
     private Integer follow;//关注数
     private Integer fans;//粉丝数
+    private Integer link;//被分享数
     private Integer videos;//视频数量
     private Date createdTime;
     private Date updateTime;
