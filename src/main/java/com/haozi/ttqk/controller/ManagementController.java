@@ -110,8 +110,9 @@ public class ManagementController {
             @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
     })
     @PostMapping("/queryTiktokUser")
-    public ResultVo<List<TikTokUserVo>>  queryTiktokUser(TikTokUserVo tikTokUserVo,Integer pageNo,Integer pageSize){
+    public ResultVo<TiktokUserResponseVo>  queryTiktokUser(TikTokUserVo tikTokUserVo,Integer pageNo,Integer pageSize){
         List<TikTokUserVo> tikTokUserVos=new ArrayList<>();
+        TiktokUserResponseVo tiktokUserResponseVo=null;
         try {
             if(pageNo==null){
                 pageNo=1;
@@ -123,21 +124,12 @@ public class ManagementController {
             if(tikTokUserVo!=null){
                 BeanUtils.copyProperties(tikTokUserVo,tiktokUser);
             }
-            List<TiktokUser> tiktokUsers= operationManagementService.queryTiktokUser(tiktokUser,pageNo,pageSize);
-            if(!CollectionUtils.isEmpty(tiktokUsers)){
-                Map<Integer,String> tagMap= operationManagementService.getTagMap();
-                for (TiktokUser tiktokUser1:tiktokUsers) {
-                    TikTokUserVo tikTokUserVo1=new TikTokUserVo();
-                    BeanUtils.copyProperties(tiktokUser1,tikTokUserVo1);
-                    tikTokUserVo1.setTagValue(tagMap.get(tiktokUser1.getTagId()));
-                    tikTokUserVos.add(tikTokUserVo1);
-                }
-            }
+            tiktokUserResponseVo= operationManagementService.queryTiktokUser(tiktokUser,pageNo,pageSize);
         } catch (Exception e) {
             log.info("查询tiktok用户异常",e);
             return ResponseUtil.fail("查询tiktok用户失败");
         }
-        return ResponseUtil.success(tikTokUserVos);
+        return ResponseUtil.success(tiktokUserResponseVo);
     }
 
     @ApiOperation(value = "添加标签", httpMethod = "POST")
@@ -476,7 +468,8 @@ public class ManagementController {
             @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
     })
     @PostMapping("/queryTaskAddFans")
-    public ResultVo<List<TaskAddFansVo>>  queryTaskAddFans(TaskAddFansVo taskAddFansVo,Integer pageNo,Integer pageSize){
+    public ResultVo<TaskAddFansResponseVo>  queryTaskAddFans(TaskAddFansVo taskAddFansVo,Integer pageNo,Integer pageSize){
+        TaskAddFansResponseVo taskAddFansResponseVo=null;
         List<TaskAddFansVo> taskAddFansVos=new ArrayList<>();
         try {
             TtTaskAddFans ttTaskAddFans=new TtTaskAddFans();
@@ -489,21 +482,12 @@ public class ManagementController {
             if(pageSize==null){
                 pageSize=50;
             }
-            List<TtTaskAddFans> ttTaskAddFansList= operationManagementService.queryTaskAddFans(ttTaskAddFans,pageNo,pageSize);
-            if(!CollectionUtils.isEmpty(ttTaskAddFansList)){
-                Map<Integer,String> tagMap= operationManagementService.getTagMap();
-                for (TtTaskAddFans ttTaskAddFans1:ttTaskAddFansList) {
-                    TaskAddFansVo taskAddFansVo1=new TaskAddFansVo();
-                    BeanUtils.copyProperties(ttTaskAddFans1,taskAddFansVo1);
-                    taskAddFansVo1.setTagValue(tagMap.get(ttTaskAddFans1.getTagId()));
-                    taskAddFansVos.add(taskAddFansVo1);
-                }
-            }
+            taskAddFansResponseVo= operationManagementService.queryTaskAddFans(ttTaskAddFans,pageNo,pageSize);
         } catch (Exception e) {
             log.info("查询添加粉丝出现异常",e);
             return ResponseUtil.fail("查询添加粉丝失败");
         }
-        return ResponseUtil.success(taskAddFansVos);
+        return ResponseUtil.success(taskAddFansResponseVo);
     }
 
     @ApiOperation(value = "查询用户未上传视频", httpMethod = "POST")

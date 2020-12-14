@@ -1,9 +1,7 @@
 package com.haozi.ttqk.service;
 
 import com.haozi.ttqk.model.*;
-import com.haozi.ttqk.vo.CommentResponseVo;
-import com.haozi.ttqk.vo.PhoneResponseVo;
-import com.haozi.ttqk.vo.VideoResponseVo;
+import com.haozi.ttqk.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,7 +42,7 @@ public interface ManagementService {
      * @param tiktokUser
      * @return
      */
-    List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser,Integer pageNo,Integer pageSize);
+    TiktokUserResponseVo queryTiktokUser(TiktokUser tiktokUser, Integer pageNo, Integer pageSize);
 
     /**
      * 保存标签
@@ -154,7 +152,7 @@ public interface ManagementService {
      * @param ttTaskAddFans
      * @return
      */
-    List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans,Integer pageNo,Integer pageSize);
+    TaskAddFansResponseVo queryTaskAddFans(TtTaskAddFans ttTaskAddFans, Integer pageNo, Integer pageSize);
 
     /**
      * 获取用户所有未上传的视频

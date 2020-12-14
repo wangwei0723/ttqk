@@ -107,7 +107,9 @@ public class ManagementServiceImpl implements ManagementService {
         return tiktokUserMapper.checkIsUserExist(userId,name,tiktokId);
     }
 
-    public List<TiktokUser> queryTiktokUser(TiktokUser tiktokUser,Integer pageNo,Integer pageSize){
+    public TiktokUserResponseVo queryTiktokUser(TiktokUser tiktokUser,Integer pageNo,Integer pageSize){
+        TiktokUserResponseVo tiktokUserResponseVo=new TiktokUserResponseVo();
+        List<TikTokUserVo> tikTokUserVos=new ArrayList<>();
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TiktokUser.class);
         Example.Criteria criteria = example.createCriteria();
@@ -138,8 +140,21 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("merchantId",tiktokUser.getMerchantId());
             }
         }
-        List<TiktokUser> tiktokUsers=new PageInfo<TiktokUser>(tiktokUserMapper.selectByExample(example)).getList();
-        return tiktokUsers;
+        PageInfo pageInfo=new PageInfo<TiktokUser>(tiktokUserMapper.selectByExample(example));
+        Integer totalNum=pageInfo.getSize();
+        List<TiktokUser> tiktokUsers=pageInfo.getList();
+        if(!CollectionUtils.isEmpty(tiktokUsers)){
+            Map<Integer,String> tagMap= getTagMap();
+            for (TiktokUser tiktokUser1:tiktokUsers) {
+                TikTokUserVo tikTokUserVo1=new TikTokUserVo();
+                BeanUtils.copyProperties(tiktokUser1,tikTokUserVo1);
+                tikTokUserVo1.setTagValue(tagMap.get(tiktokUser1.getTagId()));
+                tikTokUserVos.add(tikTokUserVo1);
+            }
+        }
+        tiktokUserResponseVo.setTotalNum(totalNum);
+        tiktokUserResponseVo.setTiktokUserList(tikTokUserVos);
+        return tiktokUserResponseVo;
     }
 
 
@@ -366,7 +381,9 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
-    public List<TtTaskAddFans> queryTaskAddFans(TtTaskAddFans ttTaskAddFans,Integer pageNo,Integer pageSize){
+    public TaskAddFansResponseVo queryTaskAddFans(TtTaskAddFans ttTaskAddFans,Integer pageNo,Integer pageSize){
+        TaskAddFansResponseVo taskAddFansResponseVo=new TaskAddFansResponseVo();
+        List<TaskAddFansVo> taskAddFansVos=new ArrayList<>();
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtTaskAddFans.class);
         Example.Criteria criteria = example.createCriteria();
@@ -375,8 +392,21 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("tagId",ttTaskAddFans.getTagId());
             }
         }
-        List<TtTaskAddFans> ttTaskAddFansList=new PageInfo<TtTaskAddFans>(ttTaskAddFansMapper.selectByExample(example)).getList();
-        return ttTaskAddFansList;
+        PageInfo pageInfo=new PageInfo<TtTaskAddFans>(ttTaskAddFansMapper.selectByExample(example));
+        Integer totalNum=pageInfo.getSize();
+        List<TtTaskAddFans> ttTaskAddFansList=pageInfo.getList();
+        if(!CollectionUtils.isEmpty(ttTaskAddFansList)){
+            Map<Integer,String> tagMap=getTagMap();
+            for (TtTaskAddFans ttTaskAddFans1:ttTaskAddFansList) {
+                TaskAddFansVo taskAddFansVo1=new TaskAddFansVo();
+                BeanUtils.copyProperties(ttTaskAddFans1,taskAddFansVo1);
+                taskAddFansVo1.setTagValue(tagMap.get(ttTaskAddFans1.getTagId()));
+                taskAddFansVos.add(taskAddFansVo1);
+            }
+        }
+        taskAddFansResponseVo.setTotalNum(totalNum);
+        taskAddFansResponseVo.setTaskAddFansList(taskAddFansVos);
+        return taskAddFansResponseVo;
     }
 
     public List<TtVideo> queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize){
