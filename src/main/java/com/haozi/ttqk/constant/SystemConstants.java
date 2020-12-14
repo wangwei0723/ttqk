@@ -15,6 +15,8 @@ public class SystemConstants {
     public static String SERVICE_URL = "http://8.129.214.95:8081/ttqk/";
     public static String FILE_BASE_PATH = "/data/file/ttqk/";
 
+    public static Integer TOKEN_VALID_TIME=48;//token有效时长，单位小时
+
     @PostConstruct
     public void initDev(){
         SystemConstants.dev = env;

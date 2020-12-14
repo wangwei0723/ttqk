@@ -1,5 +1,6 @@
 package com.haozi.ttqk.service;
 
+import com.haozi.ttqk.enums.LoginEnum;
 import com.haozi.ttqk.model.OperationLoginRecord;
 import com.haozi.ttqk.model.OperationUser;
 
@@ -10,5 +11,5 @@ public interface UserService {
     Integer addUser(OperationUser user);
     OperationUser getUserByNameAndPwd(String name,String pwd);
     Boolean saveLoginRecord(OperationLoginRecord operationLoginRecord);
-    Integer checkToken(Integer userId,String token);
+    LoginEnum checkToken(Integer userId, String token);
 }

@@ -1,5 +1,7 @@
 package com.haozi.ttqk.service.impl;
 
+import com.haozi.ttqk.constant.SystemConstants;
+import com.haozi.ttqk.enums.LoginEnum;
 import com.haozi.ttqk.mapper.OperationLoginRecordMapper;
 import com.haozi.ttqk.mapper.OperationUserMapper;
 import com.haozi.ttqk.model.OperationLoginRecord;
@@ -11,6 +13,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Service("userService")
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Integer checkToken(Integer userId, String token) {
+    public LoginEnum checkToken(Integer userId, String token) {
         Example example=new Example(OperationLoginRecord.class);
         Example.Criteria criteria=example.createCriteria();
         criteria.andEqualTo("userId",userId);
@@ -76,9 +79,15 @@ public class UserServiceImpl implements UserService {
         criteria.andEqualTo("isDelete",0);
         List<OperationLoginRecord> operationLoginRecords=operationLoginRecordMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(operationLoginRecords)){
-            return 1;
+            return LoginEnum.NOT_LOGIN;
         }
-        return 1;
+        OperationLoginRecord operationLoginRecord=operationLoginRecords.get(0);
+        if(new Date().getTime()-operationLoginRecord.getLoginTime().getTime()> SystemConstants.TOKEN_VALID_TIME*60*60*1000){
+            return LoginEnum.TOKEN_INVALID;
+        }
+        operationLoginRecord.setLoginTime(new Date());
+        operationLoginRecordMapper.updateByPrimaryKeySelective(operationLoginRecord);
+        return LoginEnum.LOGIN_NORMAL;
     }
 
 }

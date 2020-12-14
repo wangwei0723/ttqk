@@ -2,6 +2,7 @@ package com.haozi.ttqk.interceptor;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.haozi.ttqk.enums.LoginEnum;
 import com.haozi.ttqk.service.UserService;
 import com.haozi.ttqk.util.ResponseUtil;
 import io.swagger.models.auth.In;
@@ -34,7 +35,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
         LOGGER.info("uri = {},userId={}, token = {}", uri, userId, token);
 
-        if(!StringUtils.isEmpty(uri) && uri.indexOf("login")!=-1){
+        if(StringUtils.isEmpty(uri) || uri.indexOf("login")!=-1 ){
             return true;
         }
         Integer userIdInteger=null;
@@ -45,19 +46,19 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 e.printStackTrace();
             }
         }
-//        if(StringUtils.isEmpty(userId) || userIdInteger==null){
-//            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
-//            response.setCharacterEncoding("UTF-8");
-//            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail("登录已过期，请重新登录")));
-//            return false;
-//        }
-//        Integer result=userService.checkToken(userIdInteger,token);
-//        if(result==null || result!=1){
-//            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
-//            response.setCharacterEncoding("UTF-8");
-//            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail("登录已过期，请重新登录")));
-//            return false;
-//        }
+        if(StringUtils.isEmpty(userId) || userIdInteger==null){
+            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail(LoginEnum.NOT_LOGIN.getMsg())));
+            return false;
+        }
+        LoginEnum loginEnum=userService.checkToken(userIdInteger,token);
+        if(!loginEnum.getCode().equals(1)){
+            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail(loginEnum.getMsg())));
+            return false;
+        }
         return true;
 
         }
