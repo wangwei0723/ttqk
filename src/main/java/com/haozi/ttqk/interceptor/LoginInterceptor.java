@@ -46,19 +46,19 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 e.printStackTrace();
             }
         }
-        if(StringUtils.isEmpty(userId) || userIdInteger==null){
-            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail(LoginEnum.NOT_LOGIN.getMsg())));
-            return false;
-        }
-        LoginEnum loginEnum=userService.checkToken(userIdInteger,token);
-        if(!loginEnum.getCode().equals(1)){
-            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail(loginEnum.getMsg())));
-            return false;
-        }
+//        if(StringUtils.isEmpty(userId) || userIdInteger==null){
+//            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
+//            response.setCharacterEncoding("UTF-8");
+//            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail(LoginEnum.NOT_LOGIN.getMsg())));
+//            return false;
+//        }
+//        LoginEnum loginEnum=userService.checkToken(userIdInteger,token);
+//        if(!loginEnum.getCode().equals(1)){
+//            response.setHeader("Content-type", "text/html;charset=UTF-8");  //这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859
+//            response.setCharacterEncoding("UTF-8");
+//            response.getWriter().write(JSONObject.toJSONString(ResponseUtil.fail(loginEnum.getMsg())));
+//            return false;
+//        }
         return true;
 
         }
