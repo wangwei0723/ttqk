@@ -556,6 +556,34 @@ public class ManagementController {
         return ResponseUtil.success(videoVos);
     }
 
+    @ApiOperation(value = "查询视频列表", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/queryVideo")
+    public ResultVo<VideoResponseVo>  queryUserUnUploadVideo(VideoVo videoVo,Integer pageNo,Integer pageSize){
+        List<VideoVo> videoVos=new ArrayList<>();
+        VideoResponseVo videoResponseVo=null;
+        try {
+            if(pageNo==null){
+                pageNo=1;
+            }
+            if(pageSize==null){
+                pageSize=50;
+            }
+            TtVideo ttVideo=new TtVideo();
+            if(videoVo!=null){
+                BeanUtils.copyProperties(videoVo,ttVideo);
+            }
+            videoResponseVo= operationManagementService.queryVideo(ttVideo,pageNo,pageSize);
+        } catch (Exception e) {
+            log.info("查询视频列表出现异常",e);
+            return ResponseUtil.fail("查询视频列表失败");
+        }
+        return ResponseUtil.success(videoResponseVo);
+    }
+
 
     @ApiOperation(value = "更新视频上传状态", httpMethod = "POST")
     @ApiImplicitParams({

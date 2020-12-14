@@ -6,8 +6,11 @@ import com.haozi.ttqk.mapper.*;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
 import com.haozi.ttqk.util.Md5Util;
+import com.haozi.ttqk.vo.VideoResponseVo;
+import com.haozi.ttqk.vo.VideoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -354,6 +357,54 @@ public class ManagementServiceImpl implements ManagementService {
         Example example=new Example(TtVideo.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("uploadState",0);
+        criteria.andEqualTo("isDelete",0);
+        List<TtVideo> ttVideos=new PageInfo<TtVideo>(videoMapper.selectByExample(example)).getList();
+        return ttVideos;
+    }
+
+    public VideoResponseVo queryVideo(TtVideo ttVideo, Integer pageNo, Integer pageSize){
+        VideoResponseVo videoResponseVo=new VideoResponseVo();
+        List<VideoVo> videoVos=new ArrayList<>();
+        ttVideo.setIsDelete(0);
+        Integer totalNum=videoMapper.selectCount(ttVideo);
+        videoResponseVo.setTotalNum(totalNum);
+        PageHelper.startPage(pageNo,pageSize);
+        Example example=new Example(TtVideo.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(ttVideo.getUserId()!=null){
+            criteria.andEqualTo("userId",ttVideo.getUserId());
+        }
+        if(ttVideo.getTagId()!=null){
+            criteria.andEqualTo("tagId",ttVideo.getTagId());
+        }
+        criteria.andEqualTo("isDelete",0);
+
+        List<TtVideo> ttVideos=new PageInfo<TtVideo>(videoMapper.selectByExample(example)).getList();
+        if(!CollectionUtils.isEmpty(ttVideos)){
+            Map<Integer,String> tagMap= getTagMap();
+            for (TtVideo ttVideo1:ttVideos) {
+                VideoVo videoVo=new VideoVo();
+                BeanUtils.copyProperties(ttVideo1,videoVo);
+                videoVo.setTagValue(tagMap.get(ttVideo1.getTagId()));
+                videoVos.add(videoVo);
+            }
+        }
+        videoResponseVo.setVideoList(videoVos);
+        return videoResponseVo;
+    }
+
+    public List<TtVideo> queryUserUnUploadVideo(TtVideo ttVideo,Integer pageNo,Integer pageSize){
+        PageHelper.startPage(pageNo,pageSize);
+        Example example=new Example(TtVideo.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(ttVideo.getUserId()!=null){
+            criteria.andEqualTo("userId",ttVideo.getUserId());
+        }
+        if(ttVideo.getTagId()!=null){
+            criteria.andEqualTo("tagId",ttVideo.getTagId());
+        }
+
         criteria.andEqualTo("uploadState",0);
         criteria.andEqualTo("isDelete",0);
         List<TtVideo> ttVideos=new PageInfo<TtVideo>(videoMapper.selectByExample(example)).getList();

@@ -1,6 +1,7 @@
 package com.haozi.ttqk.service;
 
 import com.haozi.ttqk.model.*;
+import com.haozi.ttqk.vo.VideoResponseVo;
 
 import java.util.List;
 import java.util.Map;
@@ -159,6 +160,15 @@ public interface ManagementService {
      * @return
      */
     List<TtVideo> queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize);
+
+    /**
+     * 获取视频列表
+     * @param ttVideo
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    VideoResponseVo queryVideo(TtVideo ttVideo, Integer pageNo, Integer pageSize);
 
     /**
      * 更新视频上传状态
