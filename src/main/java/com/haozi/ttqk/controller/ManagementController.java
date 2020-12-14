@@ -258,8 +258,9 @@ public class ManagementController {
             @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
     })
     @PostMapping("/getComment")
-    public ResultVo<List<TagVo>>  getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize){
+    public ResultVo<CommentResponseVo>  getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize){
         List<CommentVo> commentVos=new ArrayList<>();
+        CommentResponseVo commentResponseVo=null;
         try {
             if(pageNo==null){
                 pageNo=1;
@@ -267,19 +268,12 @@ public class ManagementController {
             if(pageSize==null){
                 pageSize=50;
             }
-            List<TtComment> ttComments= operationManagementService.getComment(tagId,type,comment,pageNo,pageSize);
-            if(!CollectionUtils.isEmpty(ttComments)){
-                for (TtComment ttComment:ttComments) {
-                    CommentVo commentVo=new CommentVo();
-                    BeanUtils.copyProperties(ttComment,commentVo);
-                    commentVos.add(commentVo);
-                }
-            }
+            commentResponseVo= operationManagementService.getComment(tagId,type,comment,pageNo,pageSize);
         } catch (Exception e) {
             log.info("查询所有评论异常",e);
             return ResponseUtil.fail("查询所有评论失败");
         }
-        return ResponseUtil.success(commentVos);
+        return ResponseUtil.success(commentResponseVo);
     }
 
     @ApiOperation(value = "添加养号任务", httpMethod = "POST")

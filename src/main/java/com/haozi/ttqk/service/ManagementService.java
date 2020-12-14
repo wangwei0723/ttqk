@@ -1,6 +1,7 @@
 package com.haozi.ttqk.service;
 
 import com.haozi.ttqk.model.*;
+import com.haozi.ttqk.vo.CommentResponseVo;
 import com.haozi.ttqk.vo.PhoneResponseVo;
 import com.haozi.ttqk.vo.VideoResponseVo;
 
@@ -89,7 +90,7 @@ public interface ManagementService {
      * 获取所有评论
      * @return
      */
-    List<TtComment> getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize);
+    CommentResponseVo getComment(Integer tagId, Integer type, String comment, Integer pageNo, Integer pageSize);
 
     /**
      * 获取评论map

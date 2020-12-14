@@ -6,10 +6,7 @@ import com.haozi.ttqk.mapper.*;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
 import com.haozi.ttqk.util.Md5Util;
-import com.haozi.ttqk.vo.PhoneResponseVo;
-import com.haozi.ttqk.vo.PhoneVo;
-import com.haozi.ttqk.vo.VideoResponseVo;
-import com.haozi.ttqk.vo.VideoVo;
+import com.haozi.ttqk.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
@@ -210,7 +207,9 @@ public class ManagementServiceImpl implements ManagementService {
         return ttComment.getId();
     }
 
-    public List<TtComment> getComment(Integer tagId,Integer type,String comment,Integer pageNo,Integer pageSize){
+    public CommentResponseVo getComment(Integer tagId, Integer type, String comment, Integer pageNo, Integer pageSize){
+        CommentResponseVo commentResponseVo=new CommentResponseVo();
+        List<CommentVo> commentVos=new ArrayList<>();
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtComment.class);
         Example.Criteria criteria = example.createCriteria();
@@ -225,8 +224,19 @@ public class ManagementServiceImpl implements ManagementService {
             criteria.andLike("comment","%"+comment+"%");
         }
         example.setOrderByClause("created_time desc");
-        List<TtComment> ttComments=new PageInfo<TtComment>(commentMapper.selectByExample(example)).getList();
-        return ttComments;
+        PageInfo pageInfo=new PageInfo<TtComment>(commentMapper.selectByExample(example));
+        Integer totalNum=pageInfo.getSize();
+        List<TtComment> ttComments=pageInfo.getList();
+        if(!CollectionUtils.isEmpty(ttComments)){
+            for (TtComment ttComment:ttComments) {
+                CommentVo commentVo=new CommentVo();
+                BeanUtils.copyProperties(ttComment,commentVo);
+                commentVos.add(commentVo);
+            }
+        }
+        commentResponseVo.setTotalNum(totalNum);
+        commentResponseVo.setCommentList(commentVos);
+        return commentResponseVo;
     }
 
     public List<TtComment> getAllComment(){
