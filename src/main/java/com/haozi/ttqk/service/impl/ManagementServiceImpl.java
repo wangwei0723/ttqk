@@ -6,6 +6,8 @@ import com.haozi.ttqk.mapper.*;
 import com.haozi.ttqk.model.*;
 import com.haozi.ttqk.service.ManagementService;
 import com.haozi.ttqk.util.Md5Util;
+import com.haozi.ttqk.vo.PhoneResponseVo;
+import com.haozi.ttqk.vo.PhoneVo;
 import com.haozi.ttqk.vo.VideoResponseVo;
 import com.haozi.ttqk.vo.VideoVo;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +62,9 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
-    public List<TtPhone> queryPhone(TtPhone ttPhone,Integer pageNo,Integer pageSize){
+    public PhoneResponseVo queryPhone(TtPhone ttPhone, Integer pageNo, Integer pageSize){
+        PhoneResponseVo phoneResponseVo=new PhoneResponseVo();
+        List<PhoneVo> phoneVos=new ArrayList<>();
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtPhone.class);
         Example.Criteria criteria = example.createCriteria();
@@ -72,8 +76,21 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andLike("phoneModel","%"+ttPhone.getPhoneModel()+"%");
             }
         }
-        List<TtPhone> ttPhones=new PageInfo<TtPhone>(ttPhoneMapper.selectByExample(example)).getList();
-        return ttPhones;
+        criteria.andEqualTo("isDelete",0);
+        PageInfo<TtPhone> pageInfo=new PageInfo<TtPhone>(ttPhoneMapper.selectByExample(example));
+        List<TtPhone> ttPhones=pageInfo.getList();
+        Integer totalNum=pageInfo.getSize();
+        new PageInfo<TtPhone>(ttPhoneMapper.selectByExample(example));
+        if(!CollectionUtils.isEmpty(ttPhones)){
+            for (TtPhone ttPhone1:ttPhones) {
+                PhoneVo phoneVo1=new PhoneVo();
+                BeanUtils.copyProperties(ttPhone1,phoneVo1);
+                phoneVos.add(phoneVo1);
+            }
+        }
+        phoneResponseVo.setTotalNum(totalNum);
+        phoneResponseVo.setPhoneList(phoneVos);
+        return phoneResponseVo;
     }
 
     public Boolean saveTiktokUser(TiktokUser tiktokUser){
@@ -366,9 +383,6 @@ public class ManagementServiceImpl implements ManagementService {
     public VideoResponseVo queryVideo(TtVideo ttVideo, Integer pageNo, Integer pageSize){
         VideoResponseVo videoResponseVo=new VideoResponseVo();
         List<VideoVo> videoVos=new ArrayList<>();
-        ttVideo.setIsDelete(0);
-        Integer totalNum=videoMapper.selectCount(ttVideo);
-        videoResponseVo.setTotalNum(totalNum);
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtVideo.class);
         Example.Criteria criteria = example.createCriteria();
@@ -379,8 +393,9 @@ public class ManagementServiceImpl implements ManagementService {
             criteria.andEqualTo("tagId",ttVideo.getTagId());
         }
         criteria.andEqualTo("isDelete",0);
-
-        List<TtVideo> ttVideos=new PageInfo<TtVideo>(videoMapper.selectByExample(example)).getList();
+        PageInfo pageInfo=new PageInfo<TtVideo>(videoMapper.selectByExample(example));
+        Integer totalNum=pageInfo.getSize();
+        List<TtVideo> ttVideos=pageInfo.getList();
         if(!CollectionUtils.isEmpty(ttVideos)){
             Map<Integer,String> tagMap= getTagMap();
             for (TtVideo ttVideo1:ttVideos) {
@@ -390,6 +405,7 @@ public class ManagementServiceImpl implements ManagementService {
                 videoVos.add(videoVo);
             }
         }
+        videoResponseVo.setTotalNum(totalNum);
         videoResponseVo.setVideoList(videoVos);
         return videoResponseVo;
     }

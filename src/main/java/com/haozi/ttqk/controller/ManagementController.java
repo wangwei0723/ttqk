@@ -55,8 +55,8 @@ public class ManagementController {
             @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
     })
     @PostMapping("/queryMoblie")
-    public ResultVo<List<PhoneVo>>  queryMoblie(PhoneVo phoneVo,Integer pageNo,Integer pageSize){
-        List<PhoneVo> phoneVos=new ArrayList<>();
+    public ResultVo<PhoneResponseVo>  queryMoblie(PhoneVo phoneVo,Integer pageNo,Integer pageSize){
+        PhoneResponseVo phoneResponseVo=null;
         try {
             if(pageNo==null){
                 pageNo=1;
@@ -68,19 +68,12 @@ public class ManagementController {
             if(phoneVo!=null){
                 BeanUtils.copyProperties(phoneVo,ttPhone);
             }
-            List<TtPhone> ttPhones= operationManagementService.queryPhone(ttPhone,pageNo,pageSize);
-            if(!CollectionUtils.isEmpty(ttPhones)){
-                for (TtPhone ttPhone1:ttPhones) {
-                    PhoneVo phoneVo1=new PhoneVo();
-                    BeanUtils.copyProperties(ttPhone1,phoneVo1);
-                    phoneVos.add(phoneVo1);
-                }
-            }
+            phoneResponseVo= operationManagementService.queryPhone(ttPhone,pageNo,pageSize);
         } catch (Exception e) {
             log.info("查询手机出现异常",e);
             return ResponseUtil.fail("查询手机失败");
         }
-        return ResponseUtil.success(phoneVos);
+        return ResponseUtil.success(phoneResponseVo);
     }
 
     @ApiOperation(value = "添加Tiktok用户", httpMethod = "POST")

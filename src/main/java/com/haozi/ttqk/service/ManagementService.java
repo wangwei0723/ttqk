@@ -1,6 +1,7 @@
 package com.haozi.ttqk.service;
 
 import com.haozi.ttqk.model.*;
+import com.haozi.ttqk.vo.PhoneResponseVo;
 import com.haozi.ttqk.vo.VideoResponseVo;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface ManagementService {
      * @param ttPhone
      * @return
      */
-    List<TtPhone> queryPhone(TtPhone ttPhone,Integer pageNo,Integer pageSize);
+    PhoneResponseVo queryPhone(TtPhone ttPhone, Integer pageNo, Integer pageSize);
 
     /**
      * 保存tiktok用户
