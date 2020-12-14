@@ -182,7 +182,11 @@ public class ManagementServiceImpl implements ManagementService {
             log.info("ttComment为空");
             return null;
         }
-        commentMapper.insertSelective(ttComment);
+        if(ttComment.getId()==null){
+            commentMapper.insertSelective(ttComment);
+        }else {
+            commentMapper.updateByPrimaryKeySelective(ttComment);
+        }
         return ttComment.getId();
     }
 
