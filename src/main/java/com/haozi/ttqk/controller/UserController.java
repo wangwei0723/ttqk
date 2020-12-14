@@ -2,6 +2,7 @@ package com.haozi.ttqk.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.haozi.ttqk.model.OperationLoginRecord;
 import com.haozi.ttqk.model.OperationUser;
 import com.haozi.ttqk.model.OperationUserFeatures;
 import com.haozi.ttqk.model.TtDic;
@@ -50,7 +51,21 @@ public class UserController {
             if(StringUtils.isEmpty(addUserVo.getPwd())){
                 return ResponseUtil.fail("密码不能为空");
             }
+            OperationUser operationUser=userService.getUserByNameAndPwd(addUserVo.getName(),addUserVo.getPwd());
+            if(operationUser==null){
+                log.info("用户名或密码错误,用户名[{}],密码[{}]",addUserVo.getName(),addUserVo.getPwd());
+                return ResponseUtil.fail("用户名或密码错误");
+            }
             token= UUID.randomUUID().toString();
+            OperationLoginRecord operationLoginRecord=new OperationLoginRecord();
+            operationLoginRecord.setUserId(operationUser.getId());
+            operationLoginRecord.setToken(token);
+            operationLoginRecord.setLoginTime(new Date());
+            Boolean flag=userService.saveLoginRecord(operationLoginRecord);
+            if(!flag){
+                log.info("保存登录记录失败,用户名[{}],密码[{}]",addUserVo.getName(),addUserVo.getPwd());
+                return ResponseUtil.fail("登录失败");
+            }
             map.put("token",token);
             map.put("userId",1);
         } catch (Exception e) {
