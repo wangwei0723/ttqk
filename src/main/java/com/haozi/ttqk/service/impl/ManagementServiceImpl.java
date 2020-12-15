@@ -77,8 +77,7 @@ public class ManagementServiceImpl implements ManagementService {
         criteria.andEqualTo("isDelete",0);
         PageInfo<TtPhone> pageInfo=new PageInfo<TtPhone>(ttPhoneMapper.selectByExample(example));
         List<TtPhone> ttPhones=pageInfo.getList();
-        Integer totalNum=pageInfo.getSize();
-        new PageInfo<TtPhone>(ttPhoneMapper.selectByExample(example));
+        Integer totalNum=((Long) pageInfo.getTotal()).intValue();
         if(!CollectionUtils.isEmpty(ttPhones)){
             for (TtPhone ttPhone1:ttPhones) {
                 PhoneVo phoneVo1=new PhoneVo();
@@ -142,7 +141,7 @@ public class ManagementServiceImpl implements ManagementService {
             }
         }
         PageInfo pageInfo=new PageInfo<TiktokUser>(tiktokUserMapper.selectByExample(example));
-        Integer totalNum=pageInfo.getSize();
+        Integer totalNum=((Long) pageInfo.getTotal()).intValue();
         List<TiktokUser> tiktokUsers=pageInfo.getList();
         if(!CollectionUtils.isEmpty(tiktokUsers)){
             Map<Integer,String> tagMap= getTagMap();
@@ -242,7 +241,7 @@ public class ManagementServiceImpl implements ManagementService {
         }
         example.setOrderByClause("created_time desc");
         PageInfo pageInfo=new PageInfo<TtComment>(commentMapper.selectByExample(example));
-        Integer totalNum=pageInfo.getSize();
+        Integer totalNum=((Long) pageInfo.getTotal()).intValue();
         List<TtComment> ttComments=pageInfo.getList();
         if(!CollectionUtils.isEmpty(ttComments)){
             for (TtComment ttComment:ttComments) {
@@ -395,7 +394,7 @@ public class ManagementServiceImpl implements ManagementService {
             }
         }
         PageInfo pageInfo=new PageInfo<TtTaskAddFans>(ttTaskAddFansMapper.selectByExample(example));
-        Integer totalNum=pageInfo.getSize();
+        Integer totalNum=((Long) pageInfo.getTotal()).intValue();
         List<TtTaskAddFans> ttTaskAddFansList=pageInfo.getList();
         if(!CollectionUtils.isEmpty(ttTaskAddFansList)){
             Map<Integer,String> tagMap=getTagMap();
@@ -436,7 +435,7 @@ public class ManagementServiceImpl implements ManagementService {
         }
         criteria.andEqualTo("isDelete",0);
         PageInfo pageInfo=new PageInfo<TtVideo>(videoMapper.selectByExample(example));
-        Integer totalNum=pageInfo.getSize();
+        Integer totalNum=((Long) pageInfo.getTotal()).intValue();
         List<TtVideo> ttVideos=pageInfo.getList();
         if(!CollectionUtils.isEmpty(ttVideos)){
             Map<Integer,String> tagMap= getTagMap();
