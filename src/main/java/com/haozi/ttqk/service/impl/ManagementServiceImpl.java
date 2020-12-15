@@ -116,19 +116,19 @@ public class ManagementServiceImpl implements ManagementService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDelete",0);
         if(tiktokUser!=null){
-            if(tiktokUser.getUserId()!=null){
+            if(!StringUtils.isEmpty(tiktokUser.getUserId())){
                 criteria.andEqualTo("userId",tiktokUser.getUserId());
             }
-            if(tiktokUser.getName()!=null){
+            if(!StringUtils.isEmpty(tiktokUser.getName())){
                 criteria.andEqualTo("name",tiktokUser.getName());
             }
-            if(tiktokUser.getTiktokId()!=null){
+            if(!StringUtils.isEmpty(tiktokUser.getTiktokId())){
                 criteria.andEqualTo("tiktokId",tiktokUser.getTiktokId());
             }
-            if(tiktokUser.getPhone()!=null){
+            if(!StringUtils.isEmpty(tiktokUser.getPhone())){
                 criteria.andEqualTo("phone",tiktokUser.getPhone());
             }
-            if(tiktokUser.getPhoneId()!=null){
+            if(!StringUtils.isEmpty(tiktokUser.getPhoneId())){
                 criteria.andEqualTo("phoneId",tiktokUser.getPhoneId());
             }
             if(tiktokUser.getStatus()!=null){

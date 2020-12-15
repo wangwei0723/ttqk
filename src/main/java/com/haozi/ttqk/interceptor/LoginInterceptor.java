@@ -35,7 +35,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
         LOGGER.info("uri = {},userId={}, token = {}", uri, userId, token);
 
-        if(StringUtils.isEmpty(uri) || uri.indexOf("login")!=-1 ){
+        if(StringUtils.isEmpty(uri) || uri.indexOf("login")!=-1
+                || uri.indexOf("queryTiktokUser")!=-1
+                ||uri.indexOf("queryUserUnUploadVideo")!=-1
+                ||uri.indexOf("updateVideoUploadState")!=-1
+                ||uri.indexOf("uploadVideo")!=-1){
             return true;
         }
         Integer userIdInteger=null;
