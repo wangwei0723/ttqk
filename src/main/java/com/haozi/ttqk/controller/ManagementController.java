@@ -268,6 +268,22 @@ public class ManagementController {
         return ResponseUtil.success(commentResponseVo);
     }
 
+    @ApiOperation(value = "随机获取评论", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "tagId", value = "标签ID", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/getRandomComment")
+    public ResultVo<CommentVo>  getComment(Integer tagId){
+        CommentVo commentVo=null;
+        try {
+            commentVo= operationManagementService.getRandomComment(tagId);
+        } catch (Exception e) {
+            log.info("随机获取评论异常",e);
+            return ResponseUtil.fail("随机获取评论失败");
+        }
+        return ResponseUtil.success(commentVo);
+    }
+
     @ApiOperation(value = "添加养号任务", httpMethod = "POST")
     @PostMapping("/saveTaskTrainUser")
     public ResultVo<String>  saveTaskTrainUser(TaskTrainUserVo taskTrainUserVo){

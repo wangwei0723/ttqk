@@ -91,6 +91,13 @@ public interface ManagementService {
     CommentResponseVo getComment(Integer tagId, Integer type, String comment, Integer pageNo, Integer pageSize);
 
     /**
+     * 随机获取一条评论
+     * @param tagId
+     * @return
+     */
+    CommentVo getRandomComment(Integer tagId);
+
+    /**
      * 获取评论map
      * @return
      */

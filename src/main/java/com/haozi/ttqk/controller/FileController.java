@@ -75,7 +75,7 @@ public class FileController {
                 return ResponseUtil.fail("文件上传失败");
             }
             fileVo.setFileUrl(fileUrl);
-            if(fileType==1){//视频截取第一帧图片
+            if(fileType==2){//视频截取第一帧图片
                 String faceImgBasePath= SystemConstants.FILE_BASE_PATH;
 //            faceImgBasePath="C:\\Users\\wangwei\\Desktop\\临时文件\\";
                 String uuid2= UUID.randomUUID().toString();
@@ -92,7 +92,7 @@ public class FileController {
                 ttFaceFile.setUuid(uuid2);
                 ttFaceFile.setFileDirectory(faceImgDictory);
                 ttFaceFile.setFileName(fileName+".jpg");
-                ttFaceFile.setFileType(2);
+                ttFaceFile.setFileType(1);
                 ttFaceFile.setTiktokUserId(tiktokUserId);
                 ttFaceFile.setUserId(userId);
                 ttFaceFile.setFileUrl(faceFileUrl);

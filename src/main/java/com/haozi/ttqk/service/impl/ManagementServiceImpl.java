@@ -255,6 +255,27 @@ public class ManagementServiceImpl implements ManagementService {
         return commentResponseVo;
     }
 
+    public CommentVo getRandomComment(Integer tagId){
+        Example example=new Example(TtComment.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDelete",0);
+        if(tagId!=null){
+            criteria.andEqualTo("tagId",tagId);
+        }
+        List<TtComment> ttComments=commentMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(ttComments)){
+            return null;
+        }
+        Integer num=ttComments.size();
+        Integer index=(int) (Math.random()*num);
+        TtComment ttComment=ttComments.get(index);
+        CommentVo commentVo=new CommentVo();
+        if(ttComment!=null){
+            BeanUtils.copyProperties(ttComment,commentVo);
+        }
+        return commentVo;
+    }
+
     public List<TtComment> getAllComment(){
         Example example=new Example(TtComment.class);
         Example.Criteria criteria = example.createCriteria();
@@ -427,8 +448,8 @@ public class ManagementServiceImpl implements ManagementService {
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtVideo.class);
         Example.Criteria criteria = example.createCriteria();
-        if(ttVideo.getUserId()!=null){
-            criteria.andEqualTo("userId",ttVideo.getUserId());
+        if(!StringUtils.isEmpty(ttVideo.getUserId())){
+            criteria.andLike("userId","%"+ttVideo.getUserId()+"%");
         }
         if(ttVideo.getTagId()!=null){
             criteria.andEqualTo("tagId",ttVideo.getTagId());
