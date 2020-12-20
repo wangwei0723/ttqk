@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -211,6 +212,10 @@ public class ManagementController {
             ttVideo.setGreat(0);
             ttVideo.setComment(0);
             ttVideo.setUploadState(0);
+            if(videoVo.getSendTime()!=null){
+                ttVideo.setSendTime(new Date(videoVo.getSendTime()));
+            }
+
             videoId=operationManagementService.uploadVideo(ttVideo);
         } catch (Exception e) {
             log.info("上传视频出现异常",e);
@@ -533,6 +538,7 @@ public class ManagementController {
                     VideoVo videoVo=new VideoVo();
                     BeanUtils.copyProperties(ttVideo,videoVo);
                     videoVo.setTagValue(tagMap.get(ttVideo.getTagId()));
+                    videoVo.setSendTime(ttVideo.getSendTime().getTime());
                     videoVos.add(videoVo);
                 }
             }

@@ -206,7 +206,11 @@ public class ManagementServiceImpl implements ManagementService {
             log.info("ttVideo为空");
             return null;
         }
-        videoMapper.insertSelective(ttVideo);
+        if(ttVideo.getId()==null){
+            videoMapper.insertSelective(ttVideo);
+        }else {
+            videoMapper.updateByPrimaryKeySelective(ttVideo);
+        }
         return ttVideo.getId();
     }
 
@@ -464,6 +468,7 @@ public class ManagementServiceImpl implements ManagementService {
                 VideoVo videoVo=new VideoVo();
                 BeanUtils.copyProperties(ttVideo1,videoVo);
                 videoVo.setTagValue(tagMap.get(ttVideo1.getTagId()));
+                videoVo.setSendTime(ttVideo1.getSendTime().getTime());
                 videoVos.add(videoVo);
             }
         }

@@ -7,6 +7,8 @@ import java.util.Date;
 
 @Data
 public class VideoVo {
+    @ApiModelProperty(value = "ID")
+    private Integer id;
     @ApiModelProperty(value = "视频名称")
     private String name;//视频名称
     @ApiModelProperty(value = "视频地址")
@@ -26,7 +28,7 @@ public class VideoVo {
     @ApiModelProperty(value = "评论数")
     private Integer comment;//评论数
     @ApiModelProperty(value = "上传时间")
-    private Date sendTime;//上传时间
+    private Long sendTime;//上传时间
 
 
 
