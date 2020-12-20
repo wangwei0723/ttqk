@@ -116,10 +116,10 @@ public class ManagementServiceImpl implements ManagementService {
         criteria.andEqualTo("isDelete",0);
         if(tiktokUser!=null){
             if(!StringUtils.isEmpty(tiktokUser.getUserId())){
-                criteria.andEqualTo("userId",tiktokUser.getUserId());
+                criteria.andLike("userId","%"+tiktokUser.getUserId()+"%");
             }
             if(!StringUtils.isEmpty(tiktokUser.getName())){
-                criteria.andEqualTo("name",tiktokUser.getName());
+                criteria.andLike("name","%"+tiktokUser.getName()+"%");
             }
             if(!StringUtils.isEmpty(tiktokUser.getTiktokId())){
                 criteria.andEqualTo("tiktokId",tiktokUser.getTiktokId());
@@ -128,7 +128,7 @@ public class ManagementServiceImpl implements ManagementService {
                 criteria.andEqualTo("phone",tiktokUser.getPhone());
             }
             if(!StringUtils.isEmpty(tiktokUser.getPhoneId())){
-                criteria.andEqualTo("phoneId",tiktokUser.getPhoneId());
+                criteria.andLike("phoneId","%"+tiktokUser.getPhoneId()+"%");
             }
             if(tiktokUser.getStatus()!=null){
                 criteria.andEqualTo("status",tiktokUser.getStatus());
