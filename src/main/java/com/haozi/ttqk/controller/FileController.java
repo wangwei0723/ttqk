@@ -75,31 +75,31 @@ public class FileController {
                 return ResponseUtil.fail("文件上传失败");
             }
             fileVo.setFileUrl(fileUrl);
-            if(fileType==2){//视频截取第一帧图片
-                String faceImgBasePath= SystemConstants.FILE_BASE_PATH;
-//            faceImgBasePath="C:\\Users\\wangwei\\Desktop\\临时文件\\";
-                String uuid2= UUID.randomUUID().toString();
-                if(tiktokUserId!=null){
-                    faceImgBasePath=faceImgBasePath+tiktokUserId+ File.separator+uuid2;
-                }else {
-                    faceImgBasePath=faceImgBasePath+uuid2;
-                }
-                String fileName = fileEntity.getFileName().substring(0,fileEntity.getFileName().lastIndexOf("."));
-                String faceImgDictory=faceImgBasePath+File.separator+fileName+".jpg";
-                FileUploadTool.fetchFrame(fileEntity.getFilePath(),faceImgDictory);
-                String faceFileUrl=SystemConstants.SERVICE_URL+"file/download/"+uuid2;
-                TtFile ttFaceFile=new TtFile();
-                ttFaceFile.setUuid(uuid2);
-                ttFaceFile.setFileDirectory(faceImgDictory);
-                ttFaceFile.setFileName(fileName+".jpg");
-                ttFaceFile.setFileType(1);
-                ttFaceFile.setTiktokUserId(tiktokUserId);
-                ttFaceFile.setUserId(userId);
-                ttFaceFile.setFileUrl(faceFileUrl);
-                Integer id2=fileService.saveFileInfo(ttFaceFile);
-                log.info("faceFilePath:[{}]",faceImgDictory);
-                fileVo.setFileFaceUrl(faceFileUrl);
-            }
+//            if(fileType==2){//视频截取第一帧图片
+//                String faceImgBasePath= SystemConstants.FILE_BASE_PATH;
+////            faceImgBasePath="C:\\Users\\wangwei\\Desktop\\临时文件\\";
+//                String uuid2= UUID.randomUUID().toString();
+//                if(tiktokUserId!=null){
+//                    faceImgBasePath=faceImgBasePath+tiktokUserId+ File.separator+uuid2;
+//                }else {
+//                    faceImgBasePath=faceImgBasePath+uuid2;
+//                }
+//                String fileName = fileEntity.getFileName().substring(0,fileEntity.getFileName().lastIndexOf("."));
+//                String faceImgDictory=faceImgBasePath+File.separator+fileName+".jpg";
+//                FileUploadTool.fetchFrame(fileEntity.getFilePath(),faceImgDictory);
+//                String faceFileUrl=SystemConstants.SERVICE_URL+"file/download/"+uuid2;
+//                TtFile ttFaceFile=new TtFile();
+//                ttFaceFile.setUuid(uuid2);
+//                ttFaceFile.setFileDirectory(faceImgDictory);
+//                ttFaceFile.setFileName(fileName+".jpg");
+//                ttFaceFile.setFileType(1);
+//                ttFaceFile.setTiktokUserId(tiktokUserId);
+//                ttFaceFile.setUserId(userId);
+//                ttFaceFile.setFileUrl(faceFileUrl);
+//                Integer id2=fileService.saveFileInfo(ttFaceFile);
+//                log.info("faceFilePath:[{}]",faceImgDictory);
+//                fileVo.setFileFaceUrl(faceFileUrl);
+//            }
             log.info("fileUrl:[{}]",fileUrl);
             System.out.println("fileUrl"+fileUrl);
         } catch (Exception e) {
