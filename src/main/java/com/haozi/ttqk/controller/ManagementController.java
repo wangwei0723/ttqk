@@ -518,7 +518,7 @@ public class ManagementController {
             @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
     })
     @PostMapping("/queryUserUnUploadVideo")
-    public ResultVo<List<VideoVo>>  queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize){
+    public ResultVo<List<VideoVo>>  queryUserUnUploadVideo(String userId,Integer pageNo,Integer pageSize){
         List<VideoVo> videoVos=new ArrayList<>();
         try {
             if(userId==null){

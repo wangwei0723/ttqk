@@ -166,7 +166,7 @@ public interface ManagementService {
      * @param userId
      * @return
      */
-    List<TtVideo> queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize);
+    List<TtVideo> queryUserUnUploadVideo(String userId,Integer pageNo,Integer pageSize);
 
     /**
      * 获取视频列表

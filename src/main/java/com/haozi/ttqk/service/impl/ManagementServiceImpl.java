@@ -435,7 +435,7 @@ public class ManagementServiceImpl implements ManagementService {
         return taskAddFansResponseVo;
     }
 
-    public List<TtVideo> queryUserUnUploadVideo(Integer userId,Integer pageNo,Integer pageSize){
+    public List<TtVideo> queryUserUnUploadVideo(String userId,Integer pageNo,Integer pageSize){
         PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtVideo.class);
         Example.Criteria criteria = example.createCriteria();
@@ -457,6 +457,9 @@ public class ManagementServiceImpl implements ManagementService {
         }
         if(ttVideo.getTagId()!=null){
             criteria.andEqualTo("tagId",ttVideo.getTagId());
+        }
+        if(ttVideo.getUploadState()!=null){
+            criteria.andEqualTo("uploadState",ttVideo.getUploadState());
         }
         criteria.andEqualTo("isDelete",0);
         PageInfo pageInfo=new PageInfo<TtVideo>(videoMapper.selectByExample(example));
