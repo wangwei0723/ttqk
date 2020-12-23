@@ -199,7 +199,7 @@ public class UserController {
         try {
             List<OperationUserFeatures> userFeatures=menuService.getUserFeaturesByUserId(userId);
             if(!CollectionUtils.isEmpty(userFeatures)){
-                List<Integer> featureIds=userFeatures.stream().map(OperationUserFeatures::getId).collect(Collectors.toList());
+                List<Integer> featureIds=userFeatures.stream().map(OperationUserFeatures::getFeaturesId).collect(Collectors.toList());
                 List<Integer> typeIds=new ArrayList<>();
                 typeIds.add(3);
                 typeIds.add(4);
