@@ -40,6 +40,13 @@ public class ManagementController {
                 log.info("必传参数为空");
                 return ResponseUtil.fail("必传参数不能为空");
             }
+            if(phoneVo.getId()==null && !StringUtils.isEmpty(phoneVo.getPhoneId())){
+                List<TtPhone> ttPhones=operationManagementService.queryByPhoneId(phoneVo.getPhoneId());
+                if(!CollectionUtils.isEmpty(ttPhones) && ttPhones.size()>0){
+                    log.info("必传参数为空");
+                    return ResponseUtil.fail("phoneId已存在，不能重复保存");
+                }
+            }
             TtPhone ttPhone=new TtPhone();
             BeanUtils.copyProperties(phoneVo,ttPhone);
             operationManagementService.savePhone(ttPhone);

@@ -60,6 +60,14 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
+    public List<TtPhone> queryByPhoneId(String phoneId){
+        Example example=new Example(TtPhone.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("phoneId",phoneId);
+        criteria.andEqualTo("isDelete",0);
+        return ttPhoneMapper.selectByExample(example);
+    }
+
     public PhoneResponseVo queryPhone(TtPhone ttPhone, Integer pageNo, Integer pageSize){
         PhoneResponseVo phoneResponseVo=new PhoneResponseVo();
         List<PhoneVo> phoneVos=new ArrayList<>();
@@ -82,6 +90,7 @@ public class ManagementServiceImpl implements ManagementService {
             for (TtPhone ttPhone1:ttPhones) {
                 PhoneVo phoneVo1=new PhoneVo();
                 BeanUtils.copyProperties(ttPhone1,phoneVo1);
+                phoneVo1.setUpdateTime(ttPhone1.getUpdateTime().getTime());
                 phoneVos.add(phoneVo1);
             }
         }

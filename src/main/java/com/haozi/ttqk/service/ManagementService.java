@@ -14,6 +14,8 @@ public interface ManagementService {
      */
     Boolean savePhone(TtPhone ttPhone);
 
+    List<TtPhone> queryByPhoneId(String phoneId);
+
     /**
      * 查询手机
      * @param ttPhone

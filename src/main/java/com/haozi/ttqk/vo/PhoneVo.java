@@ -11,4 +11,8 @@ public class PhoneVo {
     private String phoneId;
     @ApiModelProperty(value = "手机型号")
     private String phoneModel;
+    @ApiModelProperty(value = "状态")
+    private String status;
+    @ApiModelProperty(value = "更新时间")
+    private Long updateTime;
 }

@@ -20,6 +20,7 @@ public class TtPhone {
     private String phoneId;
     private String phoneModel;
     private String uuid;
+    private String status;
     private Date createdTime;
     private Date updateTime;
     private Integer isDelete;
