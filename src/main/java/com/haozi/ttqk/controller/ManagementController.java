@@ -57,6 +57,31 @@ public class ManagementController {
         return ResponseUtil.success(phoneVo.getPhoneId());
     }
 
+    @ApiOperation(value = "更新手机状态", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "phoneId", value = "手机ID", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "状态", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/updateMobileStatus")
+    public ResultVo<String>  updateMobileStatus(String phoneId,String status){
+        Boolean flag=false;
+        try {
+            if(StringUtils.isEmpty(phoneId) || StringUtils.isEmpty(status) ){
+                log.info("必传参数为空");
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            flag=operationManagementService.updatePhoneStatus(phoneId,status);
+        } catch (Exception e) {
+            log.info("更新手机状态出现异常",e);
+            return ResponseUtil.fail("更新手机状态失败");
+        }
+        if(!flag){
+            log.info("更新手机状态失败");
+            return ResponseUtil.fail("更新手机状态失败");
+        }
+        return ResponseUtil.success("成功");
+    }
+
     @ApiOperation(value = "查询手机", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),

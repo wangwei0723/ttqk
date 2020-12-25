@@ -17,6 +17,14 @@ public interface ManagementService {
     List<TtPhone> queryByPhoneId(String phoneId);
 
     /**
+     * 更新手机状态
+     * @param phoneId
+     * @param status
+     * @return
+     */
+    Boolean updatePhoneStatus(String phoneId,String status);
+
+    /**
      * 查询手机
      * @param ttPhone
      * @return

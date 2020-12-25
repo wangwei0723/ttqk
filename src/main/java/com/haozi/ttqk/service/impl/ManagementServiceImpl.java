@@ -68,6 +68,21 @@ public class ManagementServiceImpl implements ManagementService {
         return ttPhoneMapper.selectByExample(example);
     }
 
+    public Boolean updatePhoneStatus(String phoneId,String status){
+        Example example=new Example(TtPhone.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("phoneId",phoneId);
+        criteria.andEqualTo("isDelete",0);
+        TtPhone ttPhone=new TtPhone();
+        ttPhone.setStatus(status);
+        int num=ttPhoneMapper.updateByExampleSelective(ttPhone,example);
+        if(num>0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public PhoneResponseVo queryPhone(TtPhone ttPhone, Integer pageNo, Integer pageSize){
         PhoneResponseVo phoneResponseVo=new PhoneResponseVo();
         List<PhoneVo> phoneVos=new ArrayList<>();
