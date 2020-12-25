@@ -64,11 +64,11 @@ public interface ManagementService {
     Map<Integer,String> getTagMap();
 
     /**
-     * 根据标签ID查询标签
+     * 查询标签
      * @param tagId
      * @return
      */
-    TtTag getTagById(Integer tagId);
+    TagResponseVo queryTag(Integer tagId,String tagValue,Integer pageNo,Integer pageSize);
 
     /**
      * 上传视频

@@ -164,7 +164,11 @@ public class ManagementServiceImpl implements ManagementService {
             log.info("tttTag为空");
             return null;
         }
-        tagMapper.insertSelective(ttTag);
+        if(ttTag.getId()==null){
+            tagMapper.insertSelective(ttTag);
+        }else {
+            tagMapper.updateByPrimaryKeySelective(ttTag);
+        }
         return ttTag.getId();
     }
 
@@ -187,17 +191,33 @@ public class ManagementServiceImpl implements ManagementService {
         return map;
     }
 
-    public TtTag getTagById(Integer tagId){
+    public TagResponseVo queryTag(Integer tagId,String tagValue,Integer pageNo,Integer pageSize){
+        TagResponseVo tagResponseVo=new TagResponseVo();
+        List<TagVo> tagVos=new ArrayList<>();
+        PageHelper.startPage(pageNo,pageSize);
         Example example=new Example(TtTag.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("isDelete",0);
-        criteria.andEqualTo("id",tagId);
-        List<TtTag> ttTags=tagMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(ttTags)){
-            return null;
+        if(tagId!=null){
+            criteria.andEqualTo("id",tagId);
         }
+        if(!StringUtils.isEmpty(tagValue)){
+            criteria.andLike("tagValue","%"+tagValue+"%");
+        }
+        PageInfo pageInfo=new PageInfo<TtTag>(tagMapper.selectByExample(example));
+        Integer totalNum=((Long) pageInfo.getTotal()).intValue();
+        List<TtTag> ttTags=pageInfo.getList();
+        if(!CollectionUtils.isEmpty(ttTags)){
+            for (TtTag ttTag:ttTags) {
+                TagVo tagVo=new TagVo();
+                BeanUtils.copyProperties(ttTag,tagVo);
+                tagVos.add(tagVo);
+            }
+        }
+        tagResponseVo.setTotalNum(totalNum);
+        tagResponseVo.setTagList(tagVos);
 
-        return ttTags.get(0);
+        return tagResponseVo;
     }
 
 

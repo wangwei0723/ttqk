@@ -175,24 +175,30 @@ public class ManagementController {
         return ResponseUtil.success(tagVos);
     }
 
-    @ApiOperation(value = "根据标签ID查询标签", httpMethod = "POST")
-    @PostMapping("/queryTagById")
-    public ResultVo<TagVo>  queryTagById(Integer tagId){
-        TagVo tagVo=null;
+    @ApiOperation(value = "查询标签", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "tagId", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "tagValue", value = "每页条数", required = false, dataType = "String", paramType = "query"),
+    })
+    @PostMapping("/queryTag")
+    public ResultVo<TagResponseVo>  queryTag(Integer pageNo,Integer pageSize,Integer tagId,String tagValue){
+        TagVo tagVo=new TagVo();
+        TagResponseVo tagResponseVo=null;
         try {
-            if(tagId==null){
-                log.info("tagId未空");
-                return ResponseUtil.fail("标签ID不能为空");
+            if(pageNo==null){
+                pageNo=1;
             }
-            TtTag ttTag= operationManagementService.getTagById(tagId);
-            if(ttTag!=null){
-                BeanUtils.copyProperties(ttTag,tagVo);
+            if(pageSize==null){
+                pageSize=50;
             }
+            tagResponseVo= operationManagementService.queryTag(tagId,tagValue,pageNo,pageSize);
         } catch (Exception e) {
             log.info("根据标签ID查询标签异常",e);
             return ResponseUtil.fail("根据标签ID查询标签失败");
         }
-        return ResponseUtil.success(tagVo);
+        return ResponseUtil.success(tagResponseVo);
     }
 
     @ApiOperation(value = "上传视频", httpMethod = "POST")
