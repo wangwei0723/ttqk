@@ -127,6 +127,24 @@ public class ManagementServiceImpl implements ManagementService {
         return true;
     }
 
+    public Boolean updateTiktokUserByUserId(TiktokUser tiktokUser){
+        if(tiktokUser==null){
+            log.info("tiktokUser为空");
+            return false;
+        }
+        Example example=new Example(TiktokUser.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isDelete",0);
+        criteria.andEqualTo("userId",tiktokUser.getUserId());
+        int num=tiktokUserMapper.updateByExampleSelective(tiktokUser,example);
+        if(num>0){
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+
     public Integer checkIsUserExist(String userId, String name, String tiktokId){
         return tiktokUserMapper.checkIsUserExist(userId,name,tiktokId);
     }

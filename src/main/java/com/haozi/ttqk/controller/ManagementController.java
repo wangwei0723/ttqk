@@ -137,6 +137,31 @@ public class ManagementController {
         return ResponseUtil.success(tikTokUserVo.getUserId());
     }
 
+    @ApiOperation(value = "根据userId更新Tiktok用户信息", httpMethod = "POST")
+    @PostMapping("/updateTiktokUserByUserId")
+    public ResultVo<String>  updateTiktokUserByUserId(TikTokUserVo tikTokUserVo){
+        try {
+            if(StringUtils.isEmpty(tikTokUserVo.getUserId())){
+                log.info("必传参数为空");
+                if(tikTokUserVo!=null){
+                    log.info("添加用户信息[{}]", JSONObject.toJSONString(tikTokUserVo));
+                }
+                return ResponseUtil.fail("必传参数不能为空");
+            }
+            TiktokUser tiktokUser=new TiktokUser();
+            BeanUtils.copyProperties(tikTokUserVo,tiktokUser);
+
+            Boolean flag=operationManagementService.updateTiktokUserByUserId(tiktokUser);
+            if(!flag){
+                return ResponseUtil.fail("更新用户信息失败");
+            }
+        } catch (Exception e) {
+            log.info("更新tiktok用户信息出现异常",e);
+            return ResponseUtil.fail("更新tiktok用户信息失败");
+        }
+        return ResponseUtil.success(tikTokUserVo.getUserId());
+    }
+
     @ApiOperation(value = "查询Tiktok用户", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNo", value = "页码数", required = false, dataType = "String", paramType = "query"),

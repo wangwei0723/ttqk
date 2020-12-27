@@ -39,6 +39,13 @@ public interface ManagementService {
     Boolean saveTiktokUser(TiktokUser tiktokUser);
 
     /**
+     * 根据userId更新用户信息
+     * @param tiktokUser
+     * @return
+     */
+    Boolean updateTiktokUserByUserId(TiktokUser tiktokUser);
+
+    /**
      * 校验用户是否存在
      * @param userId
      * @param name
